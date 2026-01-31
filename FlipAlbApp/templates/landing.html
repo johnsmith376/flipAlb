@@ -1,290 +1,508 @@
 {% load static %}
 <!doctype html>
-
-<style>
-    :root{
-  --bg:#0b0f14;
-  --card:#101823;
-  --card2:#0f1520;
-  --text:#e6edf3;
-  --muted:#9fb0c0;
-  --border:rgba(255,255,255,0.10);
-  --shadow:0 14px 40px rgba(0,0,0,0.45);
-  --radius:18px;
-}
-
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  color:var(--text);
-  background:
-    radial-gradient(1100px 800px at 15% 10%, rgba(70,120,255,0.22), transparent 60%),
-    radial-gradient(900px 650px at 85% 25%, rgba(255,160,70,0.18), transparent 55%),
-    var(--bg);
-}
-
-.topbar{
-  height:64px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 18px;
-  border-bottom:1px solid var(--border);
-  background: rgba(10,14,20,0.75);
-  backdrop-filter: blur(8px);
-}
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-weight:700;
-  letter-spacing:0.2px;
-}
-.logo{font-size:20px}
-.name{font-size:14px}
-
-.nav{display:flex; gap:12px}
-.navLink{
-  color:var(--text);
-  text-decoration:none;
-  font-size:13px;
-  padding:8px 10px;
-  border:1px solid var(--border);
-  border-radius:999px;
-  background: rgba(255,255,255,0.05);
-}
-
-.hero{
-  min-height: calc(100vh - 64px);
-  display:grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap:16px;
-  padding: 18px;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-.heroCard, .sideCard{
-  border:1px solid var(--border);
-  border-radius: var(--radius);
-  background: rgba(16,24,35,0.75);
-  box-shadow: var(--shadow);
-}
-
-.heroCard{
-  padding: 22px;
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-}
-
-.badge{
-  display:inline-block;
-  width:fit-content;
-  font-size:12px;
-  color:var(--muted);
-  border:1px solid var(--border);
-  background: rgba(255,255,255,0.04);
-  border-radius:999px;
-  padding:6px 10px;
-}
-
-h1{
-  margin:0;
-  font-size: 40px;
-  line-height: 1.05;
-  letter-spacing: -0.6px;
-}
-.accent{
-  color: #c7d2fe;
-}
-
-.subhead{
-  margin:0;
-  color:var(--muted);
-  line-height:1.45;
-  font-size: 15px;
-}
-
-.ctaRow{
-  display:flex;
-  gap:10px;
-  flex-wrap: wrap;
-  margin-top: 4px;
-}
-
-.btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  text-decoration:none;
-  color:var(--text);
-  font-weight:600;
-  font-size:14px;
-  padding: 10px 14px;
-  border-radius: 14px;
-  border:1px solid var(--border);
-  background: rgba(255,255,255,0.05);
-}
-
-.btnPrimary{
-  border-color: rgba(70,120,255,0.40);
-  background: linear-gradient(180deg, rgba(70,120,255,0.35), rgba(70,120,255,0.16));
-}
-
-.btnGhost{
-  background: rgba(0,0,0,0.12);
-}
-
-.stats{
-  display:grid;
-  grid-template-columns: repeat(3, minmax(0,1fr));
-  gap:10px;
-  margin-top: 6px;
-}
-
-.stat{
-  border:1px solid var(--border);
-  border-radius: 16px;
-  background: rgba(0,0,0,0.12);
-  padding: 12px;
-}
-.statNum{
-  font-size: 18px;
-  font-weight: 800;
-}
-.statLabel{
-  margin-top: 2px;
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.3;
-}
-
-.sideCard{
-  padding: 18px;
-  background: rgba(15,21,32,0.70);
-}
-
-.sideCard h2{
-  margin: 0 0 10px 0;
-  font-size: 16px;
-}
-.steps{
-  margin: 0;
-  padding-left: 18px;
-  color: var(--muted);
-  line-height: 1.5;
-  font-size: 14px;
-}
-.steps strong{ color: var(--text); }
-
-.miniCallout{
-  margin-top: 14px;
-  font-size: 12px;
-  color: var(--muted);
-  border: 1px dashed rgba(255,255,255,0.18);
-  border-radius: 14px;
-  padding: 12px;
-  background: rgba(255,255,255,0.03);
-}
-
-.footer{
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 14px 18px 20px;
-  display:flex;
-  justify-content:space-between;
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.footerLink{
-  color: var(--text);
-  text-decoration:none;
-}
-
-@media (max-width: 980px){
-  .hero{ grid-template-columns: 1fr; }
-  h1{ font-size: 34px; }
-  .stats{ grid-template-columns: 1fr; }
-}
-
-</style>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Vacant Property Hub</title>
-  <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+  <title>Vacant Property Hub • Albany</title>
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --card:#101823;
+      --card2:#0f1520;
+      --text:#e6edf3;
+      --muted:#9fb0c0;
+      --border:rgba(255,255,255,0.10);
+      --shadow:0 16px 48px rgba(0,0,0,0.48);
+      --radius:18px;
+      --radius2:22px;
+
+      --accent:#c7d2fe;
+      --accent2:#7dd3fc;
+      --warn:#ffd8a8;
+      --ok:#b6f6c8;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1100px 820px at 12% 10%, rgba(99,102,241,0.24), transparent 58%),
+        radial-gradient(900px 680px at 88% 22%, rgba(34,211,238,0.16), transparent 55%),
+        radial-gradient(900px 600px at 70% 88%, rgba(251,146,60,0.16), transparent 60%),
+        var(--bg);
+    }
+
+    /* Top nav */
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      height: 68px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 18px;
+      border-bottom:1px solid var(--border);
+      background: rgba(10,14,20,0.78);
+      backdrop-filter: blur(10px);
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      text-decoration:none;
+      color:var(--text);
+    }
+    .logo{
+      width:36px;height:36px;
+      display:grid;place-items:center;
+      border-radius:12px;
+      background: rgba(255,255,255,0.06);
+      border:1px solid var(--border);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+      font-size: 18px;
+    }
+    .brandText{
+      display:flex;
+      flex-direction:column;
+      line-height:1.1;
+    }
+    .brandTitle{
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      font-size: 14px;
+    }
+    .brandSub{
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .navLink{
+      text-decoration:none;
+      color: var(--text);
+      font-size: 13px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+    }
+    .navLink:hover{ background: rgba(255,255,255,0.08); }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+      text-decoration:none;
+      color:var(--text);
+      font-weight:700;
+      font-size:14px;
+      padding: 11px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      cursor:pointer;
+    }
+    .btnPrimary{
+      border-color: rgba(99,102,241,0.45);
+      background: linear-gradient(180deg, rgba(99,102,241,0.40), rgba(99,102,241,0.16));
+    }
+    .btnPrimary:hover{ filter: brightness(1.07); }
+    .btnGhost{
+      background: rgba(0,0,0,0.18);
+    }
+    .btnGhost:hover{ background: rgba(0,0,0,0.26); }
+
+    /* Layout */
+    .wrap{
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 22px 18px 40px;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 16px;
+      align-items: stretch;
+      margin-top: 8px;
+    }
+
+    .card{
+      border:1px solid var(--border);
+      border-radius: var(--radius2);
+      background: rgba(16,24,35,0.75);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .heroMain{
+      padding: 22px;
+      position: relative;
+    }
+
+    .badgeRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+    }
+    .dot{ width:8px; height:8px; border-radius:999px; background: var(--accent2); }
+
+    h1{
+      margin: 0;
+      font-size: 44px;
+      line-height: 1.06;
+      letter-spacing: -0.7px;
+    }
+    .accent{
+      color: var(--accent);
+    }
+    .subhead{
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 15.5px;
+      line-height: 1.5;
+      max-width: 64ch;
+    }
+
+    .ctaRow{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .facts{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 10px;
+    }
+    .fact{
+      padding: 12px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.16);
+    }
+    .factNum{
+      font-weight: 900;
+      font-size: 18px;
+      letter-spacing: -0.2px;
+    }
+    .factLabel{
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.35;
+    }
+    .factTag{
+      margin-top: 8px;
+      font-size: 12px;
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.03);
+      color: var(--muted);
+    }
+    .pillDot{ width:8px; height:8px; border-radius:999px; }
+    .pillDot--warn{ background: var(--warn); }
+    .pillDot--ok{ background: var(--ok); }
+
+    .heroSide{
+      padding: 18px;
+      background: rgba(15,21,32,0.72);
+    }
+    .heroSide h2{
+      margin: 0 0 10px;
+      font-size: 16px;
+      letter-spacing: 0.2px;
+    }
+    .sideText{
+      margin: 0;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+    .list{
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.55;
+    }
+    .list strong{ color: var(--text); }
+
+    /* Sections */
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .section{
+      padding: 18px;
+    }
+    .section h3{
+      margin: 0;
+      font-size: 15px;
+      letter-spacing: 0.25px;
+    }
+    .section p{
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.55;
+    }
+
+    .chips{
+      margin-top: 12px;
+      display:flex;
+      flex-wrap:wrap;
+      gap: 8px;
+    }
+    .chip{
+      font-size: 12px;
+      color: var(--text);
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .how{
+      margin-top: 16px;
+      padding: 18px;
+    }
+    .steps{
+      margin: 12px 0 0;
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 10px;
+    }
+    .step{
+      padding: 12px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.14);
+    }
+    .stepNum{
+      font-weight: 900;
+      color: var(--accent2);
+      font-size: 12px;
+      letter-spacing: 0.6px;
+    }
+    .stepTitle{
+      margin-top: 6px;
+      font-weight: 800;
+      font-size: 13px;
+    }
+    .stepText{
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.45;
+    }
+
+    .footer{
+      margin-top: 16px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      padding: 14px 4px 0;
+    }
+    .footer a{ color: var(--text); text-decoration:none; }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      h1{ font-size: 36px; }
+      .hero{ grid-template-columns: 1fr; }
+      .facts{ grid-template-columns: 1fr; }
+      .grid2{ grid-template-columns: 1fr; }
+      .steps{ grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
+
 <body>
   <header class="topbar">
-    <div class="brand">
-      <span class="logo">🏚️</span>
-      <span class="name">Vacant Property Hub</span>
-    </div>
+    <a class="brand" href="/">
+      <div class="logo">🏚️</div>
+      <div class="brandText">
+        <div class="brandTitle">Vacant Property Hub</div>
+        <div class="brandSub">Albany • Map-first prototype</div>
+      </div>
+    </a>
 
     <nav class="nav">
-      <a class="navLink" href="/map/">Map</a>
+      <a class="navLink" href="#problem">Problem</a>
+      <a class="navLink" href="#how">How it works</a>
+      <a class="btn btnPrimary" href="/map/">Open Map →</a>
     </nav>
   </header>
 
-  <main class="hero">
-    <div class="heroCard">
-      <div class="badge">Albany Vacancy → Housing Activation</div>
+  <main class="wrap">
+    <section class="hero">
+      <div class="card heroMain" id="problem">
+        <div class="badgeRow">
+          <div class="badge"><span class="dot"></span> Built for a 24-hour hackathon demo</div>
+          <div class="badge">One map • shared reality • faster action</div>
+        </div>
 
-      <h1>
-        Turn vacant properties into
-        <span class="accent">real housing</span>.
-      </h1>
+        <h1>
+          Make Albany’s vacant homes
+          <span class="accent">visible</span>—and easier to activate.
+        </h1>
 
-      <p class="subhead">
-        A map-first hub connecting residents, investors, nonprofits, and the Land Bank
-        around vacant properties — so they don’t stay invisible.
-      </p>
+        <p class="subhead">
+          Albany is facing a serious mismatch: thousands of homes sit “indefinitely vacant” while the city still has an effective shortage of housing.
+          Many vacancies are tied up by repairs, legal issues, or strategic holding—so they stay scattered, hard to track, and slow to resolve.
+          Our prototype is a centralized map that helps residents, the Albany County Land Bank, nonprofits, buyers, and rehabbers see the same inventory and take action.
+        </p>
 
-      <div class="ctaRow">
-        <a class="btn btnPrimary" href="/map/">Open the Map</a>
-        <a class="btn btnGhost" href="#how">How it works</a>
+        <div class="ctaRow">
+          <a class="btn btnPrimary" href="/map/">Open the Map</a>
+          <a class="btn btnGhost" href="#how">See how it works</a>
+        </div>
+
+        <div class="facts">
+          <div class="fact">
+            <div class="factNum">~4,165</div>
+            <div class="factLabel">Units remain <strong>indefinitely vacant</strong>—tied up by repairs, legal issues, or strategic holding.</div>
+            <div class="factTag"><span class="pillDot pillDot--warn"></span> Untapped supply</div>
+          </div>
+
+          <div class="fact">
+            <div class="factNum">~6,350</div>
+            <div class="factLabel">Estimated <strong>effective housing shortage</strong> across income levels—pressure felt citywide.</div>
+            <div class="factTag"><span class="pillDot pillDot--warn"></span> Supply gap</div>
+          </div>
+
+          <div class="fact">
+            <div class="factNum">50%</div>
+            <div class="factLabel">Of Albany renters are <strong>cost-burdened</strong> (paying more than 30% of income for housing).</div>
+            <div class="factTag"><span class="pillDot pillDot--ok"></span> Affordability stress</div>
+          </div>
+        </div>
       </div>
 
-      <div class="stats">
-        <div class="stat">
-          <div class="statNum">711+</div>
-          <div class="statLabel">Known vacant properties</div>
+      <aside class="card heroSide">
+        <h2>What this map is for</h2>
+        <p class="sideText">
+          The fastest way to unlock housing isn’t always new construction—it’s getting existing homes unstuck.
+          This prototype focuses on the “last mile” problem: turning scattered vacancy signals into coordinated action.
+        </p>
+
+        <ol class="list">
+          <li><strong>Residents</strong> can report vacancies and visible conditions.</li>
+          <li><strong>Land Bank & City</strong> can triage and track status (reported → in process → activated).</li>
+          <li><strong>Nonprofits</strong> can spot clusters for rehab programs and grant planning.</li>
+          <li><strong>Rehabbers/Buyers</strong> can find opportunities and signal interest.</li>
+        </ol>
+
+        <div class="chips" aria-label="Audience chips">
+          <span class="chip">Residents</span>
+          <span class="chip">Albany County Land Bank</span>
+          <span class="chip">City / Planners</span>
+          <span class="chip">Nonprofits</span>
+          <span class="chip">Rehabbers</span>
+          <span class="chip">Homebuyers</span>
         </div>
-        <div class="stat">
-          <div class="statNum">5</div>
-          <div class="statLabel">User groups connected</div>
+      </aside>
+    </section>
+
+    <section class="grid2">
+      <div class="card section">
+        <h3>Why a centralized hub matters</h3>
+        <p>
+          Even when vacancy is “known,” it’s often fragmented across spreadsheets, inspections, community reports, tax/foreclosure processes,
+          and separate organizations. A shared map creates a single “source of truth” for coordinating next steps—so the same property isn’t
+          ignored by everyone or worked on by no one.
+        </p>
+        <p>
+          This aligns with the Housing Audit’s emphasis on reinvestment and the importance of partners like the Albany County Land Bank to
+          return vacant and tax-delinquent properties to productive use.
+        </p>
+      </div>
+
+      <div class="card section">
+        <h3>What you can do on the map (MVP)</h3>
+        <p>
+          The map is the product. It’s designed to be useful even in an early prototype stage:
+        </p>
+        <p>
+          • Browse and filter properties by type/status<br/>
+          • Click a pin to view details in a side drawer<br/>
+          • (Next) Submit “I’m interested” to create a lead<br/>
+          • (Next) Report a vacant property (address + pin + notes)
+        </p>
+        <p style="color:var(--muted); margin-top:10px;">
+          In the demo, we’ll show how reported properties can move through statuses over time to track progress transparently.
+        </p>
+      </div>
+    </section>
+
+    <section class="card how" id="how">
+      <h3>How it works</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="stepNum">STEP 01</div>
+          <div class="stepTitle">See the same inventory</div>
+          <div class="stepText">A shared map makes vacancy visible across neighborhoods and organizations.</div>
         </div>
-        <div class="stat">
-          <div class="statNum">1</div>
-          <div class="statLabel">Shared source of truth</div>
+        <div class="step">
+          <div class="stepNum">STEP 02</div>
+          <div class="stepTitle">Filter by use case</div>
+          <div class="stepText">Different users can focus on what they need: triage, rehab clusters, or buyer opportunities.</div>
+        </div>
+        <div class="step">
+          <div class="stepNum">STEP 03</div>
+          <div class="stepTitle">Take action quickly</div>
+          <div class="stepText">Report a property or signal interest—so outreach and investigation can start sooner.</div>
+        </div>
+        <div class="step">
+          <div class="stepNum">STEP 04</div>
+          <div class="stepTitle">Track progress</div>
+          <div class="stepText">Statuses help show what’s being worked on, what’s stuck, and what got activated.</div>
         </div>
       </div>
-    </div>
 
-    <div class="sideCard" id="how">
-      <h2>How it works</h2>
-      <ol class="steps">
-        <li><strong>See</strong> vacancies on a shared map</li>
-        <li><strong>Filter</strong> by use case (buyer, flipper, Land Bank…)</li>
-        <li><strong>Act</strong> by reporting or expressing interest</li>
-        <li><strong>Track</strong> status as properties move into progress</li>
-      </ol>
-
-      <div class="miniCallout">
-        Built for a 24-hour hackathon MVP: fast, focused, and ready for real data.
+      <div class="ctaRow" style="margin-top:14px;">
+        <a class="btn btnPrimary" href="/map/">Open Map →</a>
+        <a class="btn btnGhost" href="#problem">Back to problem</a>
       </div>
-    </div>
+    </section>
+
+    <footer class="footer">
+      <div>Prototype landing page • Django + HTML/CSS • Hackathon build</div>
+      <div><a href="/map/">Go to Map</a></div>
+    </footer>
   </main>
-
-  <footer class="footer">
-    <span>Demo prototype • Team FlipAlb</span>
-    <a class="footerLink" href="/map/">Go to Map →</a>
-  </footer>
 </body>
 </html>
