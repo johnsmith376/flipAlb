@@ -87,17 +87,6 @@
     .cloud::before{ width: 80px; height: 80px; left: 30px; top: -24px; }
     .cloud::after { width: 110px; height: 110px; right: 26px; top: -44px; opacity:.92; }
 
-    .skip{
-      position: fixed;
-      top: 14px; right: 14px;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.20);
-      background: rgba(255,255,255,.08);
-      color: #fff;
-      cursor: pointer;
-      z-index: 10;
-    }
 
     /* Flat stage (no card/box) */
     .stage{
@@ -282,8 +271,6 @@
     <div class="cloud c3"></div>
   </div>
 
-  <button class="skip" id="skipBtn">Skip</button>
-
   <div class="stage" aria-label="House flip splash">
 
     <div class="mask">
@@ -427,11 +414,6 @@
     const DURATION_MS = 8200;
 
     function goNext(){ window.location.href = NEXT_URL; }
-
-    document.getElementById("skipBtn").addEventListener("click", (e) => {
-      e.stopPropagation();
-      goNext();
-    });
 
     // ✅ Removed "click anywhere to skip" so the button is usable
     // document.addEventListener("click", goNext);

@@ -5,35 +5,63 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Vacant Property Hub • Albany</title>
+
   <style>
     :root{
-      --bg:#0b0f14;
-      --card:#101823;
-      --card2:#0f1520;
-      --text:#e6edf3;
-      --muted:#9fb0c0;
-      --border:rgba(255,255,255,0.10);
-      --shadow:0 16px 48px rgba(0,0,0,0.48);
-      --radius:18px;
-      --radius2:22px;
+      --bg1:#e9f6ff;
+      --bg2:#ffffff;
 
-      --accent:#c7d2fe;
-      --accent2:#7dd3fc;
-      --warn:#ffd8a8;
-      --ok:#b6f6c8;
+      --card: rgba(255,255,255,0.80);
+      --card2: rgba(255,255,255,0.72);
+
+      --text:#0b1220;
+      --muted:#4b647a;
+
+      --border: rgba(15, 23, 42, 0.10);
+      --shadow: 0 18px 55px rgba(2, 6, 23, 0.10);
+
+      --radius:18px;
+      --radius2:24px;
+
+      --accent:#2563eb;
+      --accent2:#14b8a6;
+      --sun:#fb923c;
+
+      --focus: 0 0 0 4px rgba(37,99,235,0.18);
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
+
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--text);
       background:
-        radial-gradient(1100px 820px at 12% 10%, rgba(99,102,241,0.24), transparent 58%),
-        radial-gradient(900px 680px at 88% 22%, rgba(34,211,238,0.16), transparent 55%),
-        radial-gradient(900px 600px at 70% 88%, rgba(251,146,60,0.16), transparent 60%),
-        var(--bg);
+        radial-gradient(1100px 820px at 12% 10%, rgba(37,99,235,0.16), transparent 60%),
+        radial-gradient(900px 680px at 88% 22%, rgba(20,184,166,0.14), transparent 58%),
+        radial-gradient(900px 600px at 65% 90%, rgba(251,146,60,0.12), transparent 62%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+
+      background-attachment: fixed;  /* ✅ prevents scroll banding */
+      background-repeat: no-repeat;  /* ✅ prevents subtle tiling seams */
+    }
+
+
+    body::before{
+      content:"";
+      position: fixed;
+      inset:-120px;
+      pointer-events:none;
+      background:
+        conic-gradient(from 180deg at 50% 0%,
+          rgba(37,99,235,0.07),
+          rgba(20,184,166,0.05),
+          rgba(251,146,60,0.05),
+          rgba(37,99,235,0.07));
+      filter: blur(32px);
+      opacity: .55;
+      z-index: -1;
     }
 
     /* Top nav */
@@ -41,61 +69,57 @@
       position: sticky;
       top: 0;
       z-index: 10;
-      height: 68px;
+      height: 72px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      padding:0 18px;
+      padding:0 22px;
       border-bottom:1px solid var(--border);
-      background: rgba(10,14,20,0.78);
-      backdrop-filter: blur(10px);
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(12px);
     }
+
     .brand{
       display:flex;
       align-items:center;
-      gap:10px;
+      gap:12px;
       text-decoration:none;
       color:var(--text);
     }
+
     .logo{
-      width:36px;height:36px;
+      width:42px;height:42px;
       display:grid;place-items:center;
-      border-radius:12px;
-      background: rgba(255,255,255,0.06);
-      border:1px solid var(--border);
-      box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+      border-radius:14px;
+      border: 1px solid rgba(15,23,42,0.10);
+      background:
+        radial-gradient(18px 18px at 28% 25%, rgba(255,255,255,0.90), rgba(255,255,255,0.30)),
+        linear-gradient(180deg, rgba(37,99,235,0.16), rgba(20,184,166,0.10));
+      box-shadow: 0 10px 26px rgba(2,6,23,0.08);
       font-size: 18px;
     }
-    .brandText{
-      display:flex;
-      flex-direction:column;
-      line-height:1.1;
-    }
-    .brandTitle{
-      font-weight: 800;
-      letter-spacing: 0.2px;
-      font-size: 14px;
-    }
-    .brandSub{
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
+
+    .brandText{ display:flex; flex-direction:column; line-height:1.1; }
+    .brandTitle{ font-weight: 900; font-size: 14px; letter-spacing: .2px; }
+    .brandSub{ font-size: 12px; color: var(--muted); margin-top: 2px; }
+
     .nav{
       display:flex;
       align-items:center;
       gap:10px;
     }
+
     .navLink{
       text-decoration:none;
       color: var(--text);
       font-size: 13px;
       padding: 9px 12px;
       border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(15,23,42,0.10);
+      background: rgba(255,255,255,0.55);
+      transition: transform .15s ease, background .15s ease;
     }
-    .navLink:hover{ background: rgba(255,255,255,0.08); }
+    .navLink:hover{ background: rgba(255,255,255,0.80); transform: translateY(-1px); }
 
     .btn{
       display:inline-flex;
@@ -103,59 +127,72 @@
       justify-content:center;
       gap: 8px;
       text-decoration:none;
-      color:var(--text);
-      font-weight:700;
+      font-weight:900;
       font-size:14px;
       padding: 11px 14px;
       border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(15,23,42,0.10);
       cursor:pointer;
+      transition: transform .15s ease, filter .15s ease, background .15s ease;
     }
+    .btn:focus{ outline:none; box-shadow: var(--focus); }
+
     .btnPrimary{
-      border-color: rgba(99,102,241,0.45);
-      background: linear-gradient(180deg, rgba(99,102,241,0.40), rgba(99,102,241,0.16));
+      color: white;
+      border-color: rgba(37,99,235,0.35);
+      background: linear-gradient(180deg, rgba(37,99,235,0.95), rgba(20,184,166,0.92));
+      box-shadow: 0 14px 36px rgba(37,99,235,0.16);
     }
-    .btnPrimary:hover{ filter: brightness(1.07); }
+    .btnPrimary:hover{ filter: brightness(1.05); transform: translateY(-1px); }
+
     .btnGhost{
-      background: rgba(0,0,0,0.18);
+      color: var(--text);
+      background: rgba(255,255,255,0.60);
     }
-    .btnGhost:hover{ background: rgba(0,0,0,0.26); }
+    .btnGhost:hover{ background: rgba(255,255,255,0.82); transform: translateY(-1px); }
 
-    /* Layout */
+    /* Layout (more breathing room) */
     .wrap{
-      max-width: 1120px;
+      max-width: 1040px;              /* narrower = cleaner */
       margin: 0 auto;
-      padding: 22px 18px 40px;
+      padding: 34px 22px 64px;        /* more padding */
     }
 
-    .hero{
-      display:grid;
-      grid-template-columns: 1.25fr 0.75fr;
-      gap: 16px;
-      align-items: stretch;
-      margin-top: 8px;
-    }
+    .stack{ display:grid; gap: 18px; } /* consistent spacing between sections */
 
     .card{
-      border:1px solid var(--border);
+      border:1px solid rgba(15,23,42,0.10);
       border-radius: var(--radius2);
-      background: rgba(16,24,35,0.75);
+      background: var(--card);
       box-shadow: var(--shadow);
       overflow:hidden;
     }
 
+    /* HERO: vertical stack on purpose (less clutter) */
     .heroMain{
-      padding: 22px;
+      padding: 30px;
       position: relative;
     }
+
+    .heroMain::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(520px 220px at 18% 0%, rgba(37,99,235,0.10), transparent 60%),
+        radial-gradient(520px 220px at 85% 0%, rgba(20,184,166,0.08), transparent 62%);
+      pointer-events:none;
+      opacity:.85;
+    }
+    .heroMain > *{ position:relative; }
 
     .badgeRow{
       display:flex;
       flex-wrap:wrap;
       gap: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
+
     .badge{
       display:inline-flex;
       align-items:center;
@@ -164,79 +201,82 @@
       color: var(--muted);
       padding: 7px 10px;
       border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(15,23,42,0.10);
+      background: rgba(255,255,255,0.58);
     }
-    .dot{ width:8px; height:8px; border-radius:999px; background: var(--accent2); }
+    .dot{
+      width:8px; height:8px; border-radius:999px;
+      background: linear-gradient(180deg, var(--accent2), var(--accent));
+    }
 
     h1{
       margin: 0;
       font-size: 44px;
-      line-height: 1.06;
+      line-height: 1.08;
       letter-spacing: -0.7px;
+      max-width: 18ch; /* keeps headline tidy */
     }
+
     .accent{
-      color: var(--accent);
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
+
     .subhead{
-      margin: 12px 0 0;
+      margin: 14px 0 0;
       color: var(--muted);
-      font-size: 15.5px;
-      line-height: 1.5;
-      max-width: 64ch;
+      font-size: 16px;
+      line-height: 1.7;
+      max-width: 70ch;
     }
 
     .ctaRow{
       display:flex;
       flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 16px;
+      gap: 12px;
+      margin-top: 18px;
     }
 
+    /* Facts: 2 columns = calmer (and 1 on mobile) */
     .facts{
-      margin-top: 18px;
+      margin-top: 22px;
       display:grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
     }
     .fact{
-      padding: 12px;
+      padding: 16px;
       border-radius: 18px;
-      border: 1px solid var(--border);
-      background: rgba(0,0,0,0.16);
+      border: 1px solid rgba(15,23,42,0.10);
+      background: rgba(255,255,255,0.58);
     }
-    .factNum{
-      font-weight: 900;
-      font-size: 18px;
-      letter-spacing: -0.2px;
-    }
-    .factLabel{
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: 12.5px;
-      line-height: 1.35;
-    }
+    .factNum{ font-weight: 950; font-size: 22px; letter-spacing: -0.3px; }
+    .factLabel{ margin-top: 6px; color: var(--muted); font-size: 13.5px; line-height: 1.55; }
+
     .factTag{
-      margin-top: 8px;
+      margin-top: 10px;
       font-size: 12px;
       display:inline-flex;
       align-items:center;
       gap: 8px;
       padding: 6px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(15,23,42,0.10);
+      background: rgba(255,255,255,0.55);
       color: var(--muted);
     }
     .pillDot{ width:8px; height:8px; border-radius:999px; }
-    .pillDot--warn{ background: var(--warn); }
-    .pillDot--ok{ background: var(--ok); }
+    .pillDot--warn{ background: rgba(245,158,11,0.85); }
+    .pillDot--ok{ background: rgba(22,163,74,0.85); }
 
-    .heroSide{
-      padding: 18px;
-      background: rgba(15,21,32,0.72);
+    /* Side card is now its own section below hero (less cramped) */
+    .side{
+      padding: 22px 24px;
+      background: var(--card2);
     }
-    .heroSide h2{
+    .side h2{
       margin: 0 0 10px;
       font-size: 16px;
       letter-spacing: 0.2px;
@@ -244,42 +284,22 @@
     .sideText{
       margin: 0;
       color: var(--muted);
-      font-size: 13.5px;
-      line-height: 1.5;
+      font-size: 14px;
+      line-height: 1.65;
+      max-width: 72ch;
     }
     .list{
-      margin: 12px 0 0;
+      margin: 14px 0 0;
       padding-left: 18px;
       color: var(--muted);
-      font-size: 13.5px;
-      line-height: 1.55;
+      font-size: 14px;
+      line-height: 1.65;
     }
     .list strong{ color: var(--text); }
 
-    /* Sections */
-    .grid2{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-top: 16px;
-    }
-    .section{
-      padding: 18px;
-    }
-    .section h3{
-      margin: 0;
-      font-size: 15px;
-      letter-spacing: 0.25px;
-    }
-    .section p{
-      margin: 10px 0 0;
-      color: var(--muted);
-      font-size: 13.5px;
-      line-height: 1.55;
-    }
-
+    /* chips: fewer + wrap nicely */
     .chips{
-      margin-top: 12px;
+      margin-top: 14px;
       display:flex;
       flex-wrap:wrap;
       gap: 8px;
@@ -289,63 +309,74 @@
       color: var(--text);
       padding: 7px 10px;
       border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(15,23,42,0.10);
+      background: rgba(255,255,255,0.55);
+    }
+
+    /* Sections: single column for readability */
+    .section{
+      padding: 24px 24px;
+    }
+    .section h3{
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: 0.15px;
+    }
+    .section p{
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 14.2px;
+      line-height: 1.7;
+      max-width: 78ch;
     }
 
     .how{
-      margin-top: 16px;
-      padding: 18px;
+      padding: 24px;
+    }
+    .how h3{
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: 0.15px;
     }
     .steps{
-      margin: 12px 0 0;
+      margin: 14px 0 0;
       display:grid;
-      grid-template-columns: repeat(4, minmax(0,1fr));
-      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0,1fr)); /* calmer */
+      gap: 12px;
     }
     .step{
-      padding: 12px;
+      padding: 14px;
       border-radius: 18px;
-      border: 1px solid var(--border);
-      background: rgba(0,0,0,0.14);
+      border: 1px solid rgba(15,23,42,0.10);
+      background: rgba(255,255,255,0.58);
     }
     .stepNum{
-      font-weight: 900;
-      color: var(--accent2);
+      font-weight: 950;
+      color: var(--accent);
       font-size: 12px;
       letter-spacing: 0.6px;
     }
     .stepTitle{
-      margin-top: 6px;
-      font-weight: 800;
+      margin-top: 8px;
+      font-weight: 900;
       font-size: 13px;
     }
     .stepText{
       margin-top: 6px;
       color: var(--muted);
-      font-size: 12.5px;
-      line-height: 1.45;
+      font-size: 13px;
+      line-height: 1.55;
+      max-width: 46ch;
     }
-
-    .footer{
-      margin-top: 16px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap: 12px;
-      color: var(--muted);
-      font-size: 12px;
-      padding: 14px 4px 0;
-    }
-    .footer a{ color: var(--text); text-decoration:none; }
 
     /* Responsive */
     @media (max-width: 980px){
-      h1{ font-size: 36px; }
-      .hero{ grid-template-columns: 1fr; }
+      h1{ font-size: 36px; max-width: 22ch; }
       .facts{ grid-template-columns: 1fr; }
-      .grid2{ grid-template-columns: 1fr; }
       .steps{ grid-template-columns: 1fr; }
+      .wrap{ padding: 26px 16px 54px; }
+      .topbar{ padding: 0 14px; }
+      .navLink{ display:none; } /* reduce clutter on mobile */
     }
   </style>
 </head>
@@ -353,6 +384,7 @@
 <body>
   <header class="topbar">
     <a class="brand" href="/">
+      <div class="logo" aria-hidden="true">🏠</div>
       <div class="brandText">
         <div class="brandTitle">Vacant Property Hub</div>
         <div class="brandSub">Albany</div>
@@ -367,10 +399,12 @@
   </header>
 
   <main class="wrap">
-    <section class="hero">
-      <div class="card heroMain" id="problem">
+    <div class="stack">
+
+      <section class="card heroMain" id="problem">
         <div class="badgeRow">
-          <div class="badge">One map • shared reality • faster action</div>
+          <div class="badge"><span class="dot"></span> One map • shared reality • faster action</div>
+          <div class="badge">Prototype for coordinated vacancy response</div>
         </div>
 
         <h1>
@@ -408,9 +442,9 @@
             <div class="factTag"><span class="pillDot pillDot--ok"></span> Affordability stress</div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <aside class="card heroSide">
+      <section class="card side">
         <h2>What this map is for</h2>
         <p class="sideText">
           The fastest way to unlock housing isn’t always new construction—it’s getting existing homes unstuck.
@@ -432,11 +466,9 @@
           <span class="chip">Rehabbers</span>
           <span class="chip">Homebuyers</span>
         </div>
-      </aside>
-    </section>
+      </section>
 
-    <section class="grid2">
-      <div class="card section">
+      <section class="card section">
         <h3>Why a centralized hub matters</h3>
         <p>
           Even when vacancy is “known,” it’s often fragmented across spreadsheets, inspections, community reports, tax/foreclosure processes,
@@ -447,51 +479,48 @@
           This aligns with the Housing Audit’s emphasis on reinvestment and the importance of partners like the Albany County Land Bank to
           return vacant and tax-delinquent properties to productive use.
         </p>
-      </div>
+      </section>
 
-      <div class="card section">
+      <section class="card section">
         <h3>What you can do on the map (MVP)</h3>
-        <p>
-          The map is the product. It’s designed to be useful even in an early prototype stage:
-        </p>
         <p>
           • Browse and filter properties by type/status<br/>
           • Click a pin to view details in a side drawer<br/>
           • (Next) Submit “I’m interested” to create a lead<br/>
           • (Next) Report a vacant property (address + pin + notes)
         </p>
-        <p style="color:var(--muted); margin-top:10px;">
+        <p style="color:var(--muted); margin-top:12px;">
           In the demo, we’ll show how reported properties can move through statuses over time to track progress transparently.
         </p>
-      </div>
-    </section>
+      </section>
 
-    <section class="card how" id="how">
-      <h3>How it works</h3>
-      <div class="steps">
-        <div class="step">
-          <div class="stepNum">STEP 01</div>
-          <div class="stepTitle">See the same inventory</div>
-          <div class="stepText">A shared map makes vacancy visible across neighborhoods and organizations.</div>
+      <section class="card how" id="how">
+        <h3>How it works</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="stepNum">STEP 01</div>
+            <div class="stepTitle">See the same inventory</div>
+            <div class="stepText">A shared map makes vacancy visible across neighborhoods and organizations.</div>
+          </div>
+          <div class="step">
+            <div class="stepNum">STEP 02</div>
+            <div class="stepTitle">Filter by use case</div>
+            <div class="stepText">Different users can focus on what they need: triage, rehab clusters, or buyer opportunities.</div>
+          </div>
+          <div class="step">
+            <div class="stepNum">STEP 03</div>
+            <div class="stepTitle">Take action quickly</div>
+            <div class="stepText">Report a property or signal interest—so outreach and investigation can start sooner.</div>
+          </div>
+          <div class="step">
+            <div class="stepNum">STEP 04</div>
+            <div class="stepTitle">Track progress</div>
+            <div class="stepText">Statuses help show what’s being worked on, what’s stuck, and what got activated.</div>
+          </div>
         </div>
-        <div class="step">
-          <div class="stepNum">STEP 02</div>
-          <div class="stepTitle">Filter by use case</div>
-          <div class="stepText">Different users can focus on what they need: triage, rehab clusters, or buyer opportunities.</div>
-        </div>
-        <div class="step">
-          <div class="stepNum">STEP 03</div>
-          <div class="stepTitle">Take action quickly</div>
-          <div class="stepText">Report a property or signal interest—so outreach and investigation can start sooner.</div>
-        </div>
-        <div class="step">
-          <div class="stepNum">STEP 04</div>
-          <div class="stepTitle">Track progress</div>
-          <div class="stepText">Statuses help show what’s being worked on, what’s stuck, and what got activated.</div>
-        </div>
-      </div>
-    </section>
+      </section>
 
+    </div>
   </main>
 </body>
 </html>
