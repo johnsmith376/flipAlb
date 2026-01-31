@@ -45,6 +45,6 @@ function statusColor(status) {
     case "IN_PROCESS": return "#4ea8de";
     case "ACTIVATED": return "#80ed99";
     case "KNOWN":
-    default: return "#c7d2fe";
+    default: return "#87fd48ff";
   }
 }
