@@ -10,3 +10,7 @@ class Property(models.Model):
     status = models.CharField(max_length=50, default='vacant')  # KNOWN/REPORTED/etc
     property_type = models.CharField(max_length=50, default='UNK')  # SFH/2-4/etc
     city = models.CharField(max_length=50, default='Albany')
+    sqft = models.CharField(max_length=50, null=True, default="None")
+    ownerName = models.CharField(max_length=50, null=True, default="None")
+
+
