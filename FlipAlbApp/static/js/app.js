@@ -21,6 +21,7 @@ function getFiltersFromUI() {
 function openDrawer(property) {
   const drawer = document.getElementById("drawer");
   drawer.classList.remove("drawer--hidden");
+  
 
   document.getElementById("drawerTitle").textContent = property.address || "Unknown address";
   document.getElementById("drawerSubtitle").textContent =

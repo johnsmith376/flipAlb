@@ -8,6 +8,17 @@ from FlipAlbApp.models import Property
 
 geolocator = Nominatim(user_agent="albany_vacant_hack")
 
+def parse_int(x):
+    try:
+        if x is None:
+            return None
+        s = str(x).strip().replace(",", "")
+        if s == "":
+            return None
+        return int(float(s))
+    except Exception:
+        return None
+
 class Command(BaseCommand):
     def handle(self, *args, **options):
         Property.objects.all().delete()  # Fresh start
@@ -18,7 +29,7 @@ class Command(BaseCommand):
         
         print(f"Processing {len(reader)} rows...")
         created = 0
-        for row in reader[:200]:  # Rate limit
+        for row in reader[:2000]:  # Rate limit
             street_num = row.get('Street Number', '')
             street_name = row.get('Street Name', '')
             address = f"{street_num} {street_name}, Albany, NY"
@@ -34,11 +45,11 @@ class Command(BaseCommand):
                             condition=row.get('Status - secured / abandoned / unsecured / etc', 'Unknown')[:30],
                             status=row.get('Current Status - Court ACTV / Registered / Owner MIA / County Owned / ACDA Owned / AHA Owned / Rehab - Permits Issued', 'KNOWN')[:10],
                             property_type=row.get('Property Description / Tax Code', 'UNK'),
-                            city='Albany'
+                            city='Albany',
+                            sqft=parse_int(row.get("sq_footage")) 
                         )
                         created += 1
                         print(f"✅ {created}: {address}")
-                    time.sleep(1)  # Rate limit
                 except:
                     pass
         
