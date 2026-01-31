@@ -3,383 +3,441 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FlipAlb</title>
+  <title>flipALB</title>
+
   <style>
     :root{
-      --bg1:#060B16;
-      --bg2:#0B1220;
-      --glass: rgba(255,255,255,.08);
-      --stroke: rgba(255,255,255,.14);
-      --text: rgba(255,255,255,.92);
+      /* ✅ faster */
+      --dur: 7s;
+      --ease: cubic-bezier(.2,.9,.2,1);
+
+      /* Stage sizing */
+      --stageW: 560px;
+      --stageH: 460px;
+
+      /* ✅ ground line position */
+      --groundLineY: 340px;
+
+      --ink: rgba(255,255,255,.94);
       --muted: rgba(255,255,255,.72);
     }
 
-    html, body { height: 100%; margin: 0; }
+    html, body { height:100%; margin:0; }
     body{
-      background: radial-gradient(1000px 600px at 60% 30%, #15204a 0%, var(--bg2) 40%, var(--bg1) 100%);
-      color: var(--text);
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      overflow: hidden;
-      display: grid;
-      place-items: center;
+      overflow:hidden;
+      display:grid;
+      place-items:center;
+      color: var(--ink);
+
+      /* ✅ fullscreen background shift gloomy -> happy */
+      background: radial-gradient(1200px 800px at 60% 25%, #1c2f6a 0%, #0B1220 48%, #070A14 100%);
+      animation: bgShift var(--dur) var(--ease) forwards;
     }
 
-    /* subtle moving grain / glow */
-    .bgglow{
-      position: fixed; inset: -20%;
-      background:
-        radial-gradient(700px 400px at 20% 20%, rgba(120,160,255,.22), transparent 60%),
-        radial-gradient(800px 500px at 80% 70%, rgba(255,190,120,.12), transparent 55%);
-      filter: blur(20px);
-      opacity: .8;
-      animation: drift 7s ease-in-out infinite alternate;
+    @keyframes bgShift{
+      0%, 45%{
+        background: radial-gradient(1200px 800px at 60% 25%, #1c2f6a 0%, #0B1220 48%, #070A14 100%);
+      }
+      75%{
+        background: radial-gradient(1400px 900px at 60% 25%, #c9f0ff 0%, #6fc0ff 45%, #2f77df 100%);
+      }
+      100%{
+        background: radial-gradient(1400px 900px at 60% 25%, #def6ff 0%, #86d0ff 45%, #2f77df 100%);
+      }
+    }
+
+    /* Clouds appear in the “good” phase */
+    .clouds{
+      position: fixed; inset: 0;
       pointer-events:none;
-    }
-    @keyframes drift{
-      from{ transform: translate3d(-10px, -8px, 0) scale(1.02); }
-      to  { transform: translate3d(12px, 10px, 0) scale(1.06); }
-    }
-
-    .wrap{
-      width: min(520px, 92vw);
-      text-align: center;
-      position: relative;
-      z-index: 2;
-    }
-
-    /* CARD */
-    .card{
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.06);
-      border-radius: 28px;
-      box-shadow: 0 24px 80px rgba(0,0,0,.45);
-      padding: 28px 22px 22px;
-      backdrop-filter: blur(8px);
-    }
-
-    /* THE HOUSE STAGE */
-    .stage{
-      width: 320px;
-      height: 320px;
-      margin: 4px auto 12px;
-      position: relative;
-      display: grid;
-      place-items: center;
-    }
-
-    /* flip + settle */
-    .house{
-      width: 260px;
-      height: 260px;
-      position: relative;
-      transform-style: preserve-3d;
-      transform-origin: center;
-      animation: flip 2.6s ease-in-out forwards;
-    }
-    @keyframes flip{
-      0%   { transform: rotateY(0deg) scale(.94); opacity: 0; filter: blur(1px); }
-      20%  { opacity: 1; }
-      50%  { transform: rotateY(180deg) scale(1.02); filter: blur(0px); }
-      100% { transform: rotateY(360deg) scale(1.00); }
-    }
-
-    /* BEFORE + AFTER “skins” (overlay panels) */
-    .skin{
-      position: absolute;
-      inset: 0;
-      border-radius: 26px;
-      box-shadow: 0 14px 50px rgba(0,0,0,.35);
-    }
-
-    /* Bad/abandoned look */
-    .before{
-      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.03));
-      border: 1px solid rgba(255,255,255,.12);
-      filter: grayscale(1) brightness(.78) contrast(1.05);
-      opacity: 1;
-      animation: beforeFade 2.6s ease-in-out forwards;
-    }
-    @keyframes beforeFade{
-      0%{ opacity: 1; }
-      55%{ opacity: .62; }
-      100%{ opacity: .12; }
-    }
-
-    /* Nice/rehabbed look */
-    .after{
-      background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.06));
-      border: 1px solid rgba(255,255,255,.18);
       opacity: 0;
-      transform: scale(.94);
-      animation: afterPop 2.6s ease-in-out forwards;
+      animation: cloudsIn var(--dur) var(--ease) forwards;
     }
-    @keyframes afterPop{
-      0%{ opacity: 0; transform: scale(.94); }
-      55%{ opacity: .35; transform: scale(1.02); }
-      100%{ opacity: .96; transform: scale(1.00); }
+    @keyframes cloudsIn{
+      0%, 55%{ opacity:0; transform: translateY(-8px); }
+      85%{ opacity:.9; transform: translateY(0); }
+      100%{ opacity:1; transform: translateY(0); }
+    }
+    .cloud{
+      position:absolute;
+      background: rgba(255,255,255,.78);
+      border-radius: 999px;
+      filter: blur(.2px);
+    }
+    .cloud::before, .cloud::after{
+      content:"";
+      position:absolute;
+      background: rgba(255,255,255,.82);
+      border-radius: 999px;
+    }
+    .c1{ width: 220px; height: 62px; left: 10%; top: 14%; opacity:.85; }
+    .c2{ width: 280px; height: 78px; right: 12%; top: 18%; opacity:.78; }
+    .c3{ width: 170px; height: 54px; left: 52%; top: 10%; opacity:.70; }
+    .cloud::before{ width: 80px; height: 80px; left: 30px; top: -24px; }
+    .cloud::after { width: 110px; height: 110px; right: 26px; top: -44px; opacity:.92; }
+
+    .skip{
+      position: fixed;
+      top: 14px; right: 14px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.20);
+      background: rgba(255,255,255,.08);
+      color: #fff;
+      cursor: pointer;
+      z-index: 10;
     }
 
-    /* roof + house body */
-    .roof{
-      position: absolute;
+    /* Flat stage (no card/box) */
+    .stage{
+      width: min(var(--stageW), 94vw);
+      height: min(var(--stageH), 70vh);
+      position: relative;
+    }
+
+    /* Ground line */
+    .groundLine{
+      position:absolute;
       left: 50%;
-      top: 52px;
-      width: 190px;
-      height: 100px;
+      top: var(--groundLineY);
+      width: min(760px, 96vw);
+      height: 2px;
       transform: translateX(-50%);
-      background: rgba(255,255,255,.22);
-      clip-path: polygon(50% 0%, 100% 45%, 100% 62%, 50% 18%, 0% 62%, 0% 45%);
-      opacity: .55;
-      animation: roofBright 2.6s ease-in-out forwards;
-    }
-    @keyframes roofBright{
-      0%{ opacity: .35; filter: saturate(.2); }
-      60%{ opacity: .55; }
-      100%{ opacity: .85; filter: saturate(1); }
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent);
+      opacity: .7;
     }
 
-    .body{
-      position: absolute;
+    /* Soft “hole” */
+    .holeShadow{
+      position:absolute;
       left: 50%;
-      top: 120px;
-      width: 200px;
-      height: 130px;
-      transform: translateX(-50%);
-      background: rgba(255,255,255,.16);
-      border-radius: 18px;
-      opacity: .55;
-      overflow: hidden;
-      animation: bodyBright 2.6s ease-in-out forwards;
-    }
-    @keyframes bodyBright{
-      0%{ opacity: .35; filter: saturate(.1); }
-      55%{ opacity: .55; }
-      100%{ opacity: .9; filter: saturate(1); }
-    }
-
-    /* paint sweep effect */
-    .paint{
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg,
-        rgba(180,220,255,.0),
-        rgba(180,220,255,.0) 35%,
-        rgba(180,220,255,.25) 55%,
-        rgba(180,220,255,.0) 75%,
-        rgba(180,220,255,.0)
-      );
-      transform: translateX(-120%);
-      animation: paintSweep 2.6s ease-in-out forwards;
-    }
-    @keyframes paintSweep{
-      0%{ transform: translateX(-120%); opacity: 0; }
-      40%{ opacity: 0; }
-      55%{ opacity: 1; }
-      100%{ transform: translateX(120%); opacity: 0; }
-    }
-
-    /* grime cracks */
-    .grime{
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(40px 32px at 25% 35%, rgba(0,0,0,.22), transparent 60%),
-        radial-gradient(55px 40px at 70% 55%, rgba(0,0,0,.18), transparent 60%),
-        linear-gradient(135deg, transparent 35%, rgba(0,0,0,.12) 35%, transparent 36%),
-        linear-gradient(225deg, transparent 55%, rgba(0,0,0,.10) 55%, transparent 56%);
-      opacity: .9;
-      animation: grimeAway 2.6s ease-in-out forwards;
-      pointer-events:none;
-    }
-    @keyframes grimeAway{
-      0%{ opacity: .9; filter: blur(0px); }
-      55%{ opacity: .45; }
-      100%{ opacity: 0; filter: blur(1px); }
-    }
-
-    /* windows + door */
-    .window{
-      position: absolute;
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      top: 34px;
-      background: rgba(0,0,0,.34); /* “boarded/dark” */
-      box-shadow: inset 0 0 0 2px rgba(255,255,255,.10);
-      animation: windowLife 2.6s ease-in-out forwards;
-    }
-    .w1{ left: 30px; }
-    .w2{ right: 30px; }
-
-    @keyframes windowLife{
-      0%{ background: rgba(0,0,0,.38); }
-      55%{ background: rgba(0,0,0,.22); }
-      100%{ background: rgba(255,255,255,.60); box-shadow: 0 0 18px rgba(180,220,255,.25), inset 0 0 0 2px rgba(255,255,255,.12); }
-    }
-
-    .door{
-      position: absolute;
-      width: 44px;
-      height: 72px;
-      border-radius: 14px;
-      bottom: 14px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,.34);
-      box-shadow: inset 0 0 0 2px rgba(255,255,255,.10);
-      animation: doorLife 2.6s ease-in-out forwards;
-    }
-    @keyframes doorLife{
-      0%{ background: rgba(0,0,0,.36); }
-      55%{ background: rgba(0,0,0,.22); }
-      100%{ background: rgba(255,255,255,.48); box-shadow: inset 0 0 0 2px rgba(255,255,255,.12); }
-    }
-
-    /* yard transforms */
-    .yard{
-      position: absolute;
-      left: 50%;
-      bottom: 18px;
-      width: 220px;
-      height: 30px;
+      top: calc(var(--groundLineY) - 10px);
+      width: 300px;
+      height: 28px;
       transform: translateX(-50%);
       border-radius: 999px;
-      background: rgba(0,0,0,.18);
-      opacity: .8;
-      animation: yardGreen 2.6s ease-in-out forwards;
+      background: rgba(0,0,0,.55);
+      opacity: 0;
+      animation: holeIn var(--dur) var(--ease) forwards;
     }
-    @keyframes yardGreen{
-      0%{ background: rgba(0,0,0,.18); opacity:.85; }
-      55%{ opacity:.65; }
-      100%{ background: rgba(130,220,140,.25); opacity:.9; }
+    @keyframes holeIn{
+      0%, 12%{ opacity: 0; transform: translateX(-50%) scale(.7); }
+      25%{ opacity: .85; transform: translateX(-50%) scale(1.05); }
+      45%{ opacity: .65; transform: translateX(-50%) scale(1.0); }
+      100%{ opacity: 0; transform: translateX(-50%) scale(.9); }
     }
 
-    /* title reveal */
+    /*
+      ✅ MASK: shows only above the ground line.
+      ✅ Wider so you never see edge artifacts.
+    */
+    .mask{
+      position:absolute;
+      left: 50%;
+      top: 0;
+      width: 720px;          /* ✅ widened */
+      height: var(--groundLineY);
+      transform: translateX(-50%);
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .houseLayer{
+      position:absolute;
+      left: 50%;
+      top: 0;
+      width: 900px;          /* ✅ match mask */
+      height: var(--groundLineY);
+      transform: translateX(-50%);
+    }
+
+    /* Both houses bottom-aligned to the mask bottom (ground line) */
+    .houseSprite{
+      position:absolute;
+      left: 50%;
+      bottom: 0;
+      width: 380px;
+      height: 380px;
+      transform-origin: 50% 92%;
+    }
+
+    /* ✅ kill any outline/background/shadow that could look like a box */
+    .houseSprite, .houseSprite svg{
+      background: transparent !important;
+      outline: none !important;
+      border: none !important;
+      box-shadow: none !important;
+      filter: none !important;
+    }
+    .houseSprite svg{
+      width: 100%;
+      height: 100%;
+      display:block;
+      overflow: visible;
+    }
+
+    /* ✅ One smooth motion: ugly down clockwise while nice up clockwise */
+    .uglyAnim{
+      opacity: 1;
+      animation: uglyDown var(--dur) var(--ease) forwards;
+    }
+    @keyframes uglyDown{
+        0%   { transform: translateX(-50%) translateY(0px) rotate(0deg); opacity:1; }
+        10%  { transform: translateX(-50%) translateY(0px) rotate(0deg); opacity:1; }
+
+        /* ugly falls RIGHT into the line */
+        35%  { transform: translateX(calc(-50% + 140px)) translateY(150px) rotate(110deg); opacity:1; }
+        45%  { transform: translateX(calc(-50% + 180px)) translateY(220px) rotate(150deg); opacity:0; }
+        100% { transform: translateX(calc(-50% + 180px)) translateY(220px) rotate(150deg); opacity:0; }
+    }
+
+    .niceAnim{
+        opacity: 0;
+        animation: niceUp var(--dur) var(--ease) forwards;
+    }
+
+
+    @keyframes niceUp{
+        /* starts under the line on the LEFT, but with NEGATIVE rotation so it appears CLOCKWISE */
+        0%   { transform: translateX(calc(-50% - 180px)) translateY(220px) rotate(-150deg); opacity:0; }
+        20%  { transform: translateX(calc(-50% - 180px)) translateY(220px) rotate(-150deg); opacity:0; }
+
+        /* rising — still clockwise (negative angle moving toward 0) */
+        35%  { transform: translateX(calc(-50% - 140px)) translateY(150px) rotate(-110deg); opacity:.98; }
+
+        /* settles upright */
+        55%  { transform: translateX(-50%) translateY(0px) rotate(0deg); opacity:1; }
+        100% { transform: translateX(-50%) translateY(0px) rotate(0deg); opacity:1; }
+    }
+
+
+
+    /* Logo reveal */
     .brand{
-      margin-top: 10px;
-      animation: brandIn .9s ease forwards;
-      animation-delay: 1.35s;
+      position: absolute;
+      left: 50%;
+      top: calc(var(--groundLineY) + 24px);
+      transform: translateX(-50%);
+      text-align:center;
       opacity: 0;
-      transform: translateY(8px);
+      animation: brandIn var(--dur) var(--ease) forwards;
     }
     @keyframes brandIn{
-      to{ opacity: 1; transform: translateY(0); }
+      0%, 60%{ opacity:0; transform: translateX(-50%) translateY(10px); }
+      75%{ opacity:1; transform: translateX(-50%) translateY(0); }
+      100%{ opacity:1; transform: translateX(-50%) translateY(0); }
     }
-    h1{
-      font-size: 28px;
-      margin: 0;
-      letter-spacing: .2px;
+    .name{
+      margin:0;
+      font-size: 44px;
+      font-weight: 900;
+      letter-spacing: .8px;
+      text-shadow: 0 12px 34px rgba(0,0,0,.35);
     }
+    .name .thin{ font-weight: 700; opacity:.92; }
     .tag{
       margin: 8px 0 0;
       font-size: 14px;
       color: var(--muted);
     }
 
-    /* bottom progress dots */
-    .dots{
-      display:flex;
-      justify-content:center;
-      gap:8px;
-      margin-top: 16px;
-      opacity:.75;
-    }
-    .dot{
-      width: 8px; height: 8px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.25);
-      overflow:hidden;
-      position:relative;
-    }
-    .dot::after{
-      content:"";
-      position:absolute; inset:0;
-      background: rgba(255,255,255,.65);
-      transform: translateX(-110%);
-      animation: dotMove 2.6s ease forwards;
-    }
-    .dot:nth-child(2)::after{ animation-delay: .08s; }
-    .dot:nth-child(3)::after{ animation-delay: .16s; }
-    @keyframes dotMove{
-      0%{ transform: translateX(-110%); opacity: 0; }
-      25%{ opacity: 1; }
-      100%{ transform: translateX(110%); opacity: 0; }
-    }
-
-    /* skip button */
-    .skip{
-      position: fixed;
-      top: 14px;
-      right: 14px;
-      padding: 9px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.07);
-      color: #fff;
-      cursor: pointer;
-      opacity: 0;
-      animation: showSkip .6s ease forwards;
-      animation-delay: .9s;
-      z-index: 5;
-    }
-    @keyframes showSkip{ to{ opacity: 1; } }
-
-    /* small footer */
-    .hint{
-      margin-top: 10px;
-      font-size: 12px;
-      opacity: .6;
+    @media (prefers-reduced-motion: reduce){
+      body{ animation:none !important; }
+      .clouds, .holeShadow, .uglyAnim, .niceAnim, .brand { animation:none !important; }
+      .uglyAnim{ opacity:0 !important; }
+      .niceAnim{ opacity:1 !important; transform: translateX(-50%) translateY(0) rotate(0deg) !important; }
+      .brand{ opacity:1 !important; transform: translateX(-50%) translateY(0) !important; }
     }
   </style>
 </head>
 
 <body>
-  <div class="bgglow"></div>
+  <div class="clouds" aria-hidden="true">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+  </div>
 
-  <button class="skip" onclick="goNext()">Skip</button>
+  <button class="skip" id="skipBtn">Skip</button>
 
-  <div class="wrap">
-    <div class="card">
-      <div class="stage">
-        <div class="house" aria-label="House flipping animation">
-          <div class="skin before"></div>
-          <div class="skin after"></div>
+  <div class="stage" aria-label="House flip splash">
 
-          <div class="roof"></div>
+    <div class="mask">
+      <div class="houseLayer">
 
-          <div class="body">
-            <div class="paint"></div>
-            <div class="grime"></div>
-            <div class="window w1"></div>
-            <div class="window w2"></div>
-            <div class="door"></div>
-          </div>
+        <!-- UGLY HOUSE -->
+        <div class="houseSprite uglyAnim" aria-hidden="true">
+          <svg viewBox="0 0 320 320" role="img" aria-label="Ugly house illustration">
+            <defs>
+              <linearGradient id="uRoof" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#5b5b61"/>
+                <stop offset="1" stop-color="#2e2e34"/>
+              </linearGradient>
+              <linearGradient id="uWall" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#b8b3ad"/>
+                <stop offset="1" stop-color="#8c8884"/>
+              </linearGradient>
+            </defs>
 
-          <div class="yard"></div>
+            <!-- dead lawn (kept above baseline y=286) -->
+            <path d="M66 286 C110 266, 210 266, 254 286 C212 302, 108 302, 66 286Z"
+                  fill="#4b3f2f" opacity=".55"/>
+
+            <!-- walls (✅ no outer stroke) -->
+            <path d="M92 150 L228 150 L240 276 Q160 296 80 276 Z"
+                  fill="url(#uWall)"/>
+
+            <!-- roof (✅ no outer stroke) -->
+            <path d="M78 162 L160 92 L242 162 L228 174 L160 126 L92 174 Z"
+                  fill="url(#uRoof)"/>
+
+            <!-- chimney -->
+            <rect x="204" y="108" width="22" height="52" rx="7" fill="#44454c"/>
+            <rect x="200" y="104" width="30" height="12" rx="6" fill="#2b2c31"/>
+
+            <!-- gable + round window -->
+            <path d="M184 158 L242 158 L242 216 Q214 224 184 216 Z" fill="#8c8884" opacity=".55"/>
+            <circle cx="216" cy="180" r="15" fill="#1a1b22" opacity=".65"/>
+            <circle cx="216" cy="180" r="15" fill="none" stroke="#ffffff" stroke-opacity=".18" stroke-width="5"/>
+
+            <!-- window -->
+            <rect x="108" y="178" width="76" height="64" rx="14" fill="#0f1016" opacity=".70"/>
+            <rect x="108" y="178" width="76" height="64" rx="14" fill="none" stroke="#ffffff" stroke-opacity=".16" stroke-width="7"/>
+            <path d="M118 202 H178" stroke="#6b5a3e" stroke-width="10" stroke-linecap="round" opacity=".92"/>
+            <path d="M120 220 H180" stroke="#6b5a3e" stroke-width="10" stroke-linecap="round" opacity=".85"/>
+
+            <!-- porch roof -->
+            <path d="M186 224 L242 224 L232 240 L196 240 Z" fill="#3b3b42" opacity=".65"/>
+
+            <!-- door -->
+            <rect x="206" y="238" width="32" height="58" rx="12" fill="#151622" opacity=".80"/>
+            <circle cx="234" cy="266" r="3" fill="#ffffff" opacity=".25"/>
+
+            <!-- grime -->
+            <!-- grime (no filter — avoids box artifacts) -->
+            <g opacity=".18">
+            <ellipse cx="118" cy="188" rx="28" ry="18" fill="#000"/>
+            <ellipse cx="206" cy="214" rx="30" ry="20" fill="#000"/>
+            <ellipse cx="154" cy="240" rx="40" ry="18" fill="#000"/>
+
+            <!-- streaks/cracks -->
+            <path d="M104 170 C120 184, 112 206, 126 224"
+                    stroke="#000" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M218 170 C200 188, 212 206, 194 228"
+                    stroke="#000" stroke-width="3" fill="none" stroke-linecap="round"/>
+            </g>
+
+        </svg>
         </div>
-      </div>
 
-      <div class="brand">
-        <h1>FlipAlb</h1>
-        <p class="tag">Turning vacant houses into homes.</p>
-        <div class="dots" aria-hidden="true">
-          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        <!-- NICE HOUSE -->
+        <div class="houseSprite niceAnim">
+          <svg viewBox="0 0 320 320" role="img" aria-label="Nice house illustration">
+            <defs>
+              <linearGradient id="nRoof" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#ff6a6a"/>
+                <stop offset="1" stop-color="#d8334c"/>
+              </linearGradient>
+              <linearGradient id="nWall" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#ffb36b"/>
+                <stop offset="1" stop-color="#f07b4b"/>
+              </linearGradient>
+              <linearGradient id="nSide" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#ffd3a4"/>
+                <stop offset="1" stop-color="#ff9a63"/>
+              </linearGradient>
+              <linearGradient id="nTrim" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#ffffff"/>
+                <stop offset="1" stop-color="#e9f2ff"/>
+              </linearGradient>
+            </defs>
+
+            <!-- green lawn -->
+            <path d="M66 286 C110 266, 210 266, 254 286 C212 304, 108 304, 66 286Z"
+                  fill="#34d17a" opacity=".30"/>
+            <path d="M86 292 C120 276, 200 276, 234 292 C204 306, 116 306, 86 292Z"
+                  fill="#2fbe64" opacity=".22"/>
+
+            <!-- walls (✅ no outer stroke) -->
+            <path d="M92 150 L228 150 L240 276 Q160 296 80 276 Z"
+                  fill="url(#nWall)"/>
+
+            <!-- roof (✅ no outer stroke) -->
+            <path d="M78 162 L160 92 L242 162 L228 174 L160 126 L92 174 Z"
+                  fill="url(#nRoof)"/>
+            <path d="M98 162 L160 112 L222 162" stroke="#ffffff" stroke-opacity=".18" stroke-width="6" stroke-linecap="round"/>
+
+            <!-- chimney -->
+            <rect x="204" y="108" width="22" height="52" rx="7" fill="#ffd0b6" opacity=".95"/>
+            <rect x="200" y="104" width="30" height="12" rx="6" fill="#d8334c" opacity=".95"/>
+
+            <!-- right gable -->
+            <path d="M184 158 L242 158 L242 216 Q214 224 184 216 Z" fill="url(#nSide)" opacity=".95"/>
+
+            <!-- trim -->
+            <path d="M96 158 L224 158" stroke="url(#nTrim)" stroke-width="8" stroke-linecap="round" opacity=".95"/>
+
+            <!-- round window -->
+            <circle cx="216" cy="180" r="15" fill="#c6f1ff" opacity=".92"/>
+            <circle cx="216" cy="180" r="15" fill="none" stroke="url(#nTrim)" stroke-width="6" opacity=".95"/>
+            <path d="M216 166 V194" stroke="#4aa7ff" opacity=".35" stroke-width="2"/>
+            <path d="M202 180 H230" stroke="#4aa7ff" opacity=".35" stroke-width="2"/>
+
+            <!-- big window -->
+            <rect x="106" y="170" width="84" height="72" rx="14" fill="#e8fbff" opacity=".96"/>
+            <rect x="106" y="170" width="84" height="72" rx="14" fill="none" stroke="url(#nTrim)" stroke-width="8"/>
+            <path d="M148 170 V242" stroke="#4aa7ff" opacity=".30" stroke-width="2"/>
+            <path d="M106 206 H190" stroke="#4aa7ff" opacity=".30" stroke-width="2"/>
+
+            <!-- porch roof + columns -->
+            <path d="M186 224 L242 224 L232 242 L196 242 Z" fill="#ff4f64" opacity=".92"/>
+            <rect x="198" y="242" width="10" height="40" rx="5" fill="url(#nTrim)" opacity=".95"/>
+            <rect x="226" y="242" width="10" height="40" rx="5" fill="url(#nTrim)" opacity=".95"/>
+
+            <!-- door -->
+            <rect x="206" y="238" width="32" height="58" rx="12" fill="#2b2f5c" opacity=".95"/>
+            <rect x="212" y="246" width="20" height="42" rx="10" fill="#ffffff" opacity=".10"/>
+            <circle cx="234" cy="266" r="3.2" fill="#ffd18b" opacity=".95"/>
+
+            <!-- bushes -->
+            <circle cx="112" cy="280" r="14" fill="#2bd66f" opacity=".55"/>
+            <circle cx="128" cy="286" r="16" fill="#20c764" opacity=".50"/>
+            <circle cx="242" cy="282" r="14" fill="#2bd66f" opacity=".55"/>
+            <circle cx="226" cy="288" r="16" fill="#20c764" opacity=".50"/>
+          </svg>
         </div>
-        <div class="hint">Loading map…</div>
+
       </div>
+    </div>
+
+    <div class="groundLine" aria-hidden="true"></div>
+
+    <div class="brand">
+      <h1 class="name"><span class="thin">flip</span>ALB</h1>
+      <div class="tag">Vacant → visible → activated.</div>
     </div>
   </div>
 
   <script>
-    // Change this if your map route differs
-    const NEXT_URL = "/map";
+    // Set to your landing page route (or use Django url tag if you have it)
+    // const NEXT_URL = "{% url 'map' %}";
+    const NEXT_URL = "/map/";
 
-    function goNext() {
-      window.location.href = NEXT_URL;
-    }
+    // ✅ faster: matches --dur (7s) + tiny buffer
+    const DURATION_MS = 7200;
 
-    // Auto-redirect after animation finishes
-    setTimeout(goNext, 2850);
+    function goNext(){ window.location.href = NEXT_URL; }
+
+    document.getElementById("skipBtn").addEventListener("click", (e) => {
+      e.stopPropagation();
+      goNext();
+    });
+
+    // click anywhere to skip (demo-friendly)
+    document.addEventListener("click", goNext);
+
+    setTimeout(goNext, DURATION_MS);
   </script>
 </body>
 </html>
