@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-xjgch#ljg-s5v)&#iuq!)2x%9^q&*9m-#sn75leies$lzw*ufu
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['flipalb.onrender.com']
 
 
 # Application definition
