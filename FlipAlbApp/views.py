@@ -118,31 +118,34 @@ def property_to_dict(p: Property) -> dict:
     canonical_status = normalize_status(getattr(p, "status", ""))
     canonical_type = normalize_type(getattr(p, "property_type", ""))
 
+    # Clean type display names
+    type_display = {
+        "SFH": "Single Family",
+        "2-4": "2-4 Units", 
+        "5+": "5+ Units",
+        "UNK": "Unknown"
+    }.get(canonical_type, "Unknown")
+
     return {
         "id": p.id,
         "address": getattr(p, "address", ""),
         "lat": getattr(p, "lat", None),
         "lng": getattr(p, "lng", None),
-
-        # ✅ Canonical fields the frontend expects:
         "status": canonical_status,
-        "type": canonical_type,
-
-        # Optional extras for drawer/debug:
+        "type": canonical_type,  # Keep code as-is for JS filters
+        "type_display": type_display,  # New: readable names
         "condition": getattr(p, "condition", "Unknown"),
         "raw_status": getattr(p, "status", ""),
-        "raw_type": getattr(p, "property_type", ""),
         "city": getattr(p, "city", ""),
         
-        # 🔥 INTERACTIVE POPUP
+        # 🔥 BETTER POPUP (no raw clutter)
         "popup_html": f"""
             <div style='min-width:280px; padding:16px; font-family:-apple-system,BlinkMacSystemFont,sans-serif; background:white; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.15)'>
                 <h3 style='margin:0 0 12px 0; color:#1a1a1a; font-size:18px'>{getattr(p, "address", "No Address")}</h3>
                 <table style='width:100%; font-size:14px; line-height:1.4'>
-                    <tr><td style='color:#666; padding-right:12px'><b>Status:</b></td><td>{canonical_status}</td></tr>
-                    <tr><td style='color:#666; padding-right:12px'><b>Type:</b></td><td>{canonical_type}</td></tr>
-                    <tr><td style='color:#666; padding-right:12px'><b>Condition:</b></td><td>{getattr(p, "condition", "Unknown")}</td></tr>
-                    <tr><td style='color:#666; padding-right:12px'><b>Raw:</b></td><td>{str(getattr(p, "status", "")).replace("\\n", " ").replace("\\r", " ")[:60]}...</td></tr>
+                    <tr><td style='color:#666; padding-right:12px; font-weight:500'>Status:</td><td style='font-weight:600'>{canonical_status}</td></tr>
+                    <tr><td style='color:#666; padding-right:12px; font-weight:500'>Type:</td><td style='font-weight:600'>{type_display}</td></tr>
+                    <tr><td style='color:#666; padding-right:12px; font-weight:500'>Condition:</td><td>{getattr(p, "condition", "Unknown")}</td></tr>
                 </table>
                 <button onclick="alert('🚀 flipAlb Albany Property #{p.id}\\n\\n📞 Contact Owner: Coming Soon!')" 
                         style="margin-top:16px; width:100%; padding:12px; background:linear-gradient(135deg,#4a90e2,#357abd); color:white; border:none; border-radius:8px; font-weight:600; font-size:15px; cursor:pointer; box-shadow:0 2px 8px rgba(74,144,226,0.3)">
@@ -152,7 +155,6 @@ def property_to_dict(p: Property) -> dict:
         """
     }
     
-
 
 # ----------------------------
 # API endpoint used by frontend
