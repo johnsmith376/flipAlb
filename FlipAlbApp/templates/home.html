@@ -3,19 +3,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>flipALB</title>
+  <title>FlipALB</title>
 
   <style>
     :root{
-      /* ✅ faster */
       --dur: 7s;
       --ease: cubic-bezier(.2,.9,.2,1);
 
-      /* Stage sizing */
       --stageW: 560px;
       --stageH: 460px;
 
-      /* ✅ ground line position */
       --groundLineY: 340px;
 
       --ink: rgba(255,255,255,.94);
@@ -23,28 +20,39 @@
     }
 
     html, body { height:100%; margin:0; }
+
     body{
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       overflow:hidden;
       display:grid;
       place-items:center;
       color: var(--ink);
-
-      /* ✅ fullscreen background shift gloomy -> happy */
-      background: radial-gradient(1200px 800px at 60% 25%, #1c2f6a 0%, #0B1220 48%, #070A14 100%);
-      animation: bgShift var(--dur) var(--ease) forwards;
+      background: #070A14; /* base under the layers */
     }
 
-    @keyframes bgShift{
-      0%, 45%{
-        background: radial-gradient(1200px 800px at 60% 25%, #1c2f6a 0%, #0B1220 48%, #070A14 100%);
-      }
-      75%{
-        background: radial-gradient(1400px 900px at 60% 25%, #c9f0ff 0%, #6fc0ff 45%, #2f77df 100%);
-      }
-      100%{
-        background: radial-gradient(1400px 900px at 60% 25%, #def6ff 0%, #86d0ff 45%, #2f77df 100%);
-      }
+    /* ✅ Two-layer background: opacity fade = smooth */
+    .bgDark, .bgLight{
+      position: fixed;
+      inset: 0;
+      z-index: -5;
+      pointer-events: none;
+    }
+
+    .bgDark{
+      background: radial-gradient(1200px 800px at 60% 25%, #1c2f6a 0%, #0B1220 48%, #070A14 100%);
+    }
+
+    .bgLight{
+      background: radial-gradient(1400px 900px at 60% 25%, #def6ff 0%, #86d0ff 45%, #2f77df 100%);
+      opacity: 0;
+      animation: bgLightFade var(--dur) var(--ease) forwards;
+    }
+
+    /* Fade starts around when nice house begins rising (45%) and finishes smoothly */
+    @keyframes bgLightFade{
+      0%, 44% { opacity: 0; }
+      78%     { opacity: 1; }
+      100%    { opacity: 1; }
     }
 
     /* Clouds appear in the “good” phase */
@@ -53,12 +61,15 @@
       pointer-events:none;
       opacity: 0;
       animation: cloudsIn var(--dur) var(--ease) forwards;
+      z-index: -2;
     }
     @keyframes cloudsIn{
-      0%, 55%{ opacity:0; transform: translateY(-8px); }
-      85%{ opacity:.9; transform: translateY(0); }
+      0%, 48%{ opacity:0; transform: translateY(-10px); }
+      60%{ opacity:.35; transform: translateY(-4px); }
+      72%{ opacity:.75; transform: translateY(0); }
       100%{ opacity:1; transform: translateY(0); }
     }
+
     .cloud{
       position:absolute;
       background: rgba(255,255,255,.78);
@@ -108,35 +119,12 @@
       opacity: .7;
     }
 
-    /* Soft “hole” */
-    .holeShadow{
-      position:absolute;
-      left: 50%;
-      top: calc(var(--groundLineY) - 10px);
-      width: 300px;
-      height: 28px;
-      transform: translateX(-50%);
-      border-radius: 999px;
-      background: rgba(0,0,0,.55);
-      opacity: 0;
-      animation: holeIn var(--dur) var(--ease) forwards;
-    }
-    @keyframes holeIn{
-      0%, 12%{ opacity: 0; transform: translateX(-50%) scale(.7); }
-      25%{ opacity: .85; transform: translateX(-50%) scale(1.05); }
-      45%{ opacity: .65; transform: translateX(-50%) scale(1.0); }
-      100%{ opacity: 0; transform: translateX(-50%) scale(.9); }
-    }
-
-    /*
-      ✅ MASK: shows only above the ground line.
-      ✅ Wider so you never see edge artifacts.
-    */
+    /* Mask shows only above the ground line */
     .mask{
       position:absolute;
       left: 50%;
       top: 0;
-      width: 720px;          /* ✅ widened */
+      width: 720px;
       height: var(--groundLineY);
       transform: translateX(-50%);
       overflow: hidden;
@@ -147,12 +135,11 @@
       position:absolute;
       left: 50%;
       top: 0;
-      width: 900px;          /* ✅ match mask */
+      width: 900px;
       height: var(--groundLineY);
       transform: translateX(-50%);
     }
 
-    /* Both houses bottom-aligned to the mask bottom (ground line) */
     .houseSprite{
       position:absolute;
       left: 50%;
@@ -162,7 +149,6 @@
       transform-origin: 50% 92%;
     }
 
-    /* ✅ kill any outline/background/shadow that could look like a box */
     .houseSprite, .houseSprite svg{
       background: transparent !important;
       outline: none !important;
@@ -177,41 +163,33 @@
       overflow: visible;
     }
 
-    /* ✅ One smooth motion: ugly down clockwise while nice up clockwise */
     .uglyAnim{
       opacity: 1;
       animation: uglyDown var(--dur) var(--ease) forwards;
     }
     @keyframes uglyDown{
-        0%   { transform: translateX(-50%) translateY(0px) rotate(0deg); opacity:1; }
-        10%  { transform: translateX(-50%) translateY(0px) rotate(0deg); opacity:1; }
+      0%   { transform: translateX(-50%) translateY(0px) rotate(0deg); opacity:1; }
+      25%  { transform: translateX(-50%) translateY(0px) rotate(0deg); opacity:1; }
 
-        /* ugly falls RIGHT into the line */
-        35%  { transform: translateX(calc(-50% + 140px)) translateY(150px) rotate(110deg); opacity:1; }
-        45%  { transform: translateX(calc(-50% + 180px)) translateY(220px) rotate(150deg); opacity:0; }
-        100% { transform: translateX(calc(-50% + 180px)) translateY(220px) rotate(150deg); opacity:0; }
+      45%  { transform: translateX(calc(-50% + 140px)) translateY(150px) rotate(110deg); opacity:1; }
+
+      55%  { transform: translateX(calc(-50% + 180px)) translateY(220px) rotate(150deg); opacity:0; }
+      100% { transform: translateX(calc(-50% + 180px)) translateY(220px) rotate(150deg); opacity:0; }
     }
 
     .niceAnim{
-        opacity: 0;
-        animation: niceUp var(--dur) var(--ease) forwards;
+      opacity: 0;
+      animation: niceUp var(--dur) var(--ease) forwards;
     }
-
-
     @keyframes niceUp{
-        /* starts under the line on the LEFT, but with NEGATIVE rotation so it appears CLOCKWISE */
-        0%   { transform: translateX(calc(-50% - 180px)) translateY(220px) rotate(-150deg); opacity:0; }
-        20%  { transform: translateX(calc(-50% - 180px)) translateY(220px) rotate(-150deg); opacity:0; }
+      0%   { transform: translateX(calc(-50% - 180px)) translateY(220px) rotate(-150deg); opacity:0; }
+      35%  { transform: translateX(calc(-50% - 180px)) translateY(220px) rotate(-150deg); opacity:0; }
 
-        /* rising — still clockwise (negative angle moving toward 0) */
-        35%  { transform: translateX(calc(-50% - 140px)) translateY(150px) rotate(-110deg); opacity:.98; }
+      45%  { transform: translateX(calc(-50% - 140px)) translateY(150px) rotate(-110deg); opacity:.98; }
 
-        /* settles upright */
-        55%  { transform: translateX(-50%) translateY(0px) rotate(0deg); opacity:1; }
-        100% { transform: translateX(-50%) translateY(0px) rotate(0deg); opacity:1; }
+      62%  { transform: translateX(-50%) translateY(0px) rotate(0deg); opacity:1; }
+      100% { transform: translateX(-50%) translateY(0px) rotate(0deg); opacity:1; }
     }
-
-
 
     /* Logo reveal */
     .brand{
@@ -222,12 +200,14 @@
       text-align:center;
       opacity: 0;
       animation: brandIn var(--dur) var(--ease) forwards;
+      z-index: 5;
     }
     @keyframes brandIn{
       0%, 60%{ opacity:0; transform: translateX(-50%) translateY(10px); }
       75%{ opacity:1; transform: translateX(-50%) translateY(0); }
       100%{ opacity:1; transform: translateX(-50%) translateY(0); }
     }
+
     .name{
       margin:0;
       font-size: 44px;
@@ -242,17 +222,61 @@
       color: var(--muted);
     }
 
+    /* ✅ CTA button */
+    .cta{
+      position: absolute;
+      left: 50%;
+      top: calc(var(--groundLineY) + 110px);
+      transform: translateX(-50%);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+
+      padding: 12px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.10);
+      color: rgba(255,255,255,.95);
+      text-decoration: none;
+      font-weight: 800;
+      letter-spacing: .2px;
+
+      backdrop-filter: blur(10px);
+      box-shadow: 0 14px 40px rgba(0,0,0,.25);
+
+      opacity: 0;
+      animation: ctaIn var(--dur) var(--ease) forwards;
+      z-index: 6;
+    }
+
+    .cta:hover{
+      background: rgba(255,255,255,.16);
+      transform: translateX(-50%) scale(1.03);
+    }
+    .cta:active{
+      transform: translateX(-50%) scale(.98);
+    }
+
+    @keyframes ctaIn{
+      0%, 70% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+      82%     { opacity: 1; transform: translateX(-50%) translateY(0); }
+      100%    { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
     @media (prefers-reduced-motion: reduce){
-      body{ animation:none !important; }
-      .clouds, .holeShadow, .uglyAnim, .niceAnim, .brand { animation:none !important; }
+      .clouds, .uglyAnim, .niceAnim, .brand, .bgLight, .cta { animation:none !important; }
+      .bgLight{ opacity:1 !important; }
       .uglyAnim{ opacity:0 !important; }
       .niceAnim{ opacity:1 !important; transform: translateX(-50%) translateY(0) rotate(0deg) !important; }
-      .brand{ opacity:1 !important; transform: translateX(-50%) translateY(0) !important; }
+      .brand, .cta{ opacity:1 !important; transform: translateX(-50%) translateY(0) !important; }
     }
   </style>
 </head>
 
 <body>
+  <div class="bgDark"></div>
+  <div class="bgLight"></div>
+
   <div class="clouds" aria-hidden="true">
     <div class="cloud c1"></div>
     <div class="cloud c2"></div>
@@ -280,55 +304,42 @@
               </linearGradient>
             </defs>
 
-            <!-- dead lawn (kept above baseline y=286) -->
             <path d="M66 286 C110 266, 210 266, 254 286 C212 302, 108 302, 66 286Z"
                   fill="#4b3f2f" opacity=".55"/>
 
-            <!-- walls (✅ no outer stroke) -->
             <path d="M92 150 L228 150 L240 276 Q160 296 80 276 Z"
                   fill="url(#uWall)"/>
 
-            <!-- roof (✅ no outer stroke) -->
             <path d="M78 162 L160 92 L242 162 L228 174 L160 126 L92 174 Z"
                   fill="url(#uRoof)"/>
 
-            <!-- chimney -->
             <rect x="204" y="108" width="22" height="52" rx="7" fill="#44454c"/>
             <rect x="200" y="104" width="30" height="12" rx="6" fill="#2b2c31"/>
 
-            <!-- gable + round window -->
             <path d="M184 158 L242 158 L242 216 Q214 224 184 216 Z" fill="#8c8884" opacity=".55"/>
             <circle cx="216" cy="180" r="15" fill="#1a1b22" opacity=".65"/>
             <circle cx="216" cy="180" r="15" fill="none" stroke="#ffffff" stroke-opacity=".18" stroke-width="5"/>
 
-            <!-- window -->
             <rect x="108" y="178" width="76" height="64" rx="14" fill="#0f1016" opacity=".70"/>
             <rect x="108" y="178" width="76" height="64" rx="14" fill="none" stroke="#ffffff" stroke-opacity=".16" stroke-width="7"/>
             <path d="M118 202 H178" stroke="#6b5a3e" stroke-width="10" stroke-linecap="round" opacity=".92"/>
             <path d="M120 220 H180" stroke="#6b5a3e" stroke-width="10" stroke-linecap="round" opacity=".85"/>
 
-            <!-- porch roof -->
             <path d="M186 224 L242 224 L232 240 L196 240 Z" fill="#3b3b42" opacity=".65"/>
 
-            <!-- door -->
             <rect x="206" y="238" width="32" height="58" rx="12" fill="#151622" opacity=".80"/>
             <circle cx="234" cy="266" r="3" fill="#ffffff" opacity=".25"/>
 
-            <!-- grime -->
-            <!-- grime (no filter — avoids box artifacts) -->
             <g opacity=".18">
-            <ellipse cx="118" cy="188" rx="28" ry="18" fill="#000"/>
-            <ellipse cx="206" cy="214" rx="30" ry="20" fill="#000"/>
-            <ellipse cx="154" cy="240" rx="40" ry="18" fill="#000"/>
-
-            <!-- streaks/cracks -->
-            <path d="M104 170 C120 184, 112 206, 126 224"
+              <ellipse cx="118" cy="188" rx="28" ry="18" fill="#000"/>
+              <ellipse cx="206" cy="214" rx="30" ry="20" fill="#000"/>
+              <ellipse cx="154" cy="240" rx="40" ry="18" fill="#000"/>
+              <path d="M104 170 C120 184, 112 206, 126 224"
                     stroke="#000" stroke-width="3" fill="none" stroke-linecap="round"/>
-            <path d="M218 170 C200 188, 212 206, 194 228"
+              <path d="M218 170 C200 188, 212 206, 194 228"
                     stroke="#000" stroke-width="3" fill="none" stroke-linecap="round"/>
             </g>
-
-        </svg>
+          </svg>
         </div>
 
         <!-- NICE HOUSE -->
@@ -353,54 +364,43 @@
               </linearGradient>
             </defs>
 
-            <!-- green lawn -->
             <path d="M66 286 C110 266, 210 266, 254 286 C212 304, 108 304, 66 286Z"
                   fill="#34d17a" opacity=".30"/>
             <path d="M86 292 C120 276, 200 276, 234 292 C204 306, 116 306, 86 292Z"
                   fill="#2fbe64" opacity=".22"/>
 
-            <!-- walls (✅ no outer stroke) -->
             <path d="M92 150 L228 150 L240 276 Q160 296 80 276 Z"
                   fill="url(#nWall)"/>
 
-            <!-- roof (✅ no outer stroke) -->
             <path d="M78 162 L160 92 L242 162 L228 174 L160 126 L92 174 Z"
                   fill="url(#nRoof)"/>
             <path d="M98 162 L160 112 L222 162" stroke="#ffffff" stroke-opacity=".18" stroke-width="6" stroke-linecap="round"/>
 
-            <!-- chimney -->
             <rect x="204" y="108" width="22" height="52" rx="7" fill="#ffd0b6" opacity=".95"/>
             <rect x="200" y="104" width="30" height="12" rx="6" fill="#d8334c" opacity=".95"/>
 
-            <!-- right gable -->
             <path d="M184 158 L242 158 L242 216 Q214 224 184 216 Z" fill="url(#nSide)" opacity=".95"/>
 
-            <!-- trim -->
             <path d="M96 158 L224 158" stroke="url(#nTrim)" stroke-width="8" stroke-linecap="round" opacity=".95"/>
 
-            <!-- round window -->
             <circle cx="216" cy="180" r="15" fill="#c6f1ff" opacity=".92"/>
             <circle cx="216" cy="180" r="15" fill="none" stroke="url(#nTrim)" stroke-width="6" opacity=".95"/>
             <path d="M216 166 V194" stroke="#4aa7ff" opacity=".35" stroke-width="2"/>
             <path d="M202 180 H230" stroke="#4aa7ff" opacity=".35" stroke-width="2"/>
 
-            <!-- big window -->
             <rect x="106" y="170" width="84" height="72" rx="14" fill="#e8fbff" opacity=".96"/>
             <rect x="106" y="170" width="84" height="72" rx="14" fill="none" stroke="url(#nTrim)" stroke-width="8"/>
             <path d="M148 170 V242" stroke="#4aa7ff" opacity=".30" stroke-width="2"/>
             <path d="M106 206 H190" stroke="#4aa7ff" opacity=".30" stroke-width="2"/>
 
-            <!-- porch roof + columns -->
             <path d="M186 224 L242 224 L232 242 L196 242 Z" fill="#ff4f64" opacity=".92"/>
             <rect x="198" y="242" width="10" height="40" rx="5" fill="url(#nTrim)" opacity=".95"/>
             <rect x="226" y="242" width="10" height="40" rx="5" fill="url(#nTrim)" opacity=".95"/>
 
-            <!-- door -->
             <rect x="206" y="238" width="32" height="58" rx="12" fill="#2b2f5c" opacity=".95"/>
             <rect x="212" y="246" width="20" height="42" rx="10" fill="#ffffff" opacity=".10"/>
             <circle cx="234" cy="266" r="3.2" fill="#ffd18b" opacity=".95"/>
 
-            <!-- bushes -->
             <circle cx="112" cy="280" r="14" fill="#2bd66f" opacity=".55"/>
             <circle cx="128" cy="286" r="16" fill="#20c764" opacity=".50"/>
             <circle cx="242" cy="282" r="14" fill="#2bd66f" opacity=".55"/>
@@ -414,18 +414,18 @@
     <div class="groundLine" aria-hidden="true"></div>
 
     <div class="brand">
-      <h1 class="name"><span class="thin">flip</span>ALB</h1>
-      <div class="tag">Vacant → visible → activated.</div>
+      <h1 class="name"><span class="thin">Flip</span>ALB</h1>
+      <div class="tag">Vacant → Visible → Activated.</div>
     </div>
+
+    <!-- ✅ Button to /landing -->
+    <a class="cta" href="/landing">Help Flip Albany →</a>
+
   </div>
 
   <script>
-    // Set to your landing page route (or use Django url tag if you have it)
-    // const NEXT_URL = "{% url 'map' %}";
-    const NEXT_URL = "/map/";
-
-    // ✅ faster: matches --dur (7s) + tiny buffer
-    const DURATION_MS = 7200;
+    const NEXT_URL = "/landing";
+    const DURATION_MS = 8200;
 
     function goNext(){ window.location.href = NEXT_URL; }
 
@@ -434,10 +434,11 @@
       goNext();
     });
 
-    // click anywhere to skip (demo-friendly)
-    document.addEventListener("click", goNext);
+    // ✅ Removed "click anywhere to skip" so the button is usable
+    // document.addEventListener("click", goNext);
 
-    setTimeout(goNext, DURATION_MS);
+    // Optional auto-advance (comment this out if you want ONLY the button/skip)
+    // setTimeout(goNext, DURATION_MS);
   </script>
 </body>
 </html>
