@@ -20,11 +20,11 @@ function clearPins() {
 
 function statusColor(status) {
   switch ((status || "").toUpperCase()) {
-    case "REPORTED": return "#ffd166";   // orange
-    case "IN_PROCESS": return "#4ea8de"; // blue
-    case "ACTIVATED": return "#80ed99";  // green
-    case "KNOWN":
-    default: return "#87fd48";           // bright green (6-digit)
+    case "REPORTED": return "#ff6666ff";   // orange
+    case "IN_PROCESS": return "#4cb6f8ff"; // blue
+    case "ACTIVATED": return "#21ff55ff";  // green
+    case "Status Unknown":
+    default: return "#ea87d4ff";           // bright green (6-digit)
   }
 }
 

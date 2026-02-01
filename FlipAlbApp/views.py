@@ -34,7 +34,7 @@ def normalize_status(raw_status: str) -> str:
     s = (raw_status or "").strip().upper()
 
     # Pass through if already canonical
-    if s in {"KNOWN", "REPORTED", "IN_PROCESS", "ACTIVATED"}:
+    if s in {"Status", "REPORTED", "IN_PROCESS", "ACTIVATED"}:
         return s
 
     # Signals that it is being actively worked
@@ -56,7 +56,7 @@ def normalize_status(raw_status: str) -> str:
     if any(k in s for k in activated_keywords):
         return "ACTIVATED"
 
-    return "KNOWN"
+    return "Status Unknown"
 
 
 def normalize_type(raw_type: str) -> str:
@@ -292,7 +292,7 @@ def properties(request):
     if type_filter in {"SFH", "2-4", "5+", "UNK"}:
         props = [x for x in props if x["type"] == type_filter]
 
-    if status_filter in {"KNOWN", "REPORTED", "IN_PROCESS", "ACTIVATED"}:
+    if status_filter in {"Status Unknown", "REPORTED", "IN_PROCESS", "ACTIVATED"}:
         props = [x for x in props if x["status"] == status_filter]
 
     return JsonResponse({"properties": props, "count": len(props)})
