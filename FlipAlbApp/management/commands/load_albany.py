@@ -5,21 +5,28 @@ import csv
 import io
 import time
 from tqdm import tqdm
-
+import re
 from FlipAlbApp.models import Property
 
 geolocator = Nominatim(user_agent="albany_vacant_hack")
 
-def parse_int(x):
-    try:
-        if x is None:
-            return None
-        s = str(x).strip().replace(",", "")
-        if s == "":
-            return None
-        return int(float(s))
-    except Exception:
+def parse_int_sqft(x):
+    if x is None:
         return None
+    s = str(x).strip().lower()
+    if not s:
+        return None
+
+    # remove commas (e.g., "1,425 sq ft")
+    s = s.replace(",", "")
+
+    # grab the first integer/decimal in the string
+    m = re.search(r"(\d+(\.\d+)?)", s)
+    if not m:
+        return None
+
+    # convert to int (1425.0 -> 1425)
+    return int(float(m.group(1)))
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -52,7 +59,7 @@ class Command(BaseCommand):
 
                 if not location:
                     continue
-
+                print(parse_int_sqft(row.get("Sq. Footage")))
                 Property.objects.create(
                     address=address,
                     lat=location.latitude,
@@ -61,7 +68,7 @@ class Command(BaseCommand):
                     status=(row.get("Current Status - Court ACTV / Registered / Owner MIA / County Owned / ACDA Owned / AHA Owned / Rehab - Permits Issued") or "KNOWN")[:10],
                     property_type=(row.get("Property Description / Tax Code") or "UNK"),
                     city="Albany",
-                    sqft=parse_int(row.get("sq_footage")),
+                    sqft=parse_int_sqft(row.get("Sq. Footage")),
                     ownerName=row.get("owner_name")
                 )
 
