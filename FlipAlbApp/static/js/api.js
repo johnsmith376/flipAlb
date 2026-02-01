@@ -1,7 +1,7 @@
+// collect api data for frontend 
 async function apiGetProperties(filters) {
-  // Build query string from filters (all optional)
   const params = new URLSearchParams();
-  if (filters.role) params.set("role", filters.role);         // optional, backend can ignore
+  if (filters.role) params.set("role", filters.role);        
   if (filters.type) params.set("type", filters.type);
   if (filters.status) params.set("status", filters.status);
 
@@ -12,7 +12,6 @@ async function apiGetProperties(filters) {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
 
-    // Expecting: { properties: [...] }
     if (!data || !Array.isArray(data.properties)) return [];
     return data.properties;
   } catch (err) {

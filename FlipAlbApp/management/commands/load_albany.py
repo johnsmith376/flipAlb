@@ -17,20 +17,18 @@ def parse_int_sqft(x):
     if not s:
         return None
 
-    # remove commas (e.g., "1,425 sq ft")
     s = s.replace(",", "")
 
-    # grab the first integer/decimal in the string
     m = re.search(r"(\d+(\.\d+)?)", s)
     if not m:
         return None
 
-    # convert to int (1425.0 -> 1425)
     return int(float(m.group(1)))
 
+# collect data from api with needed columns
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        Property.objects.all().delete()  # Fresh start
+        Property.objects.all().delete()  
 
         url = "https://data.ny.gov/api/views/nv2j-hmda/rows.csv?accessType=DOWNLOAD&app_token=7gKHCBp0BSATVeyxqCNQLtzYT"
         resp = requests.get(url, timeout=60)
@@ -55,7 +53,7 @@ class Command(BaseCommand):
 
             try:
                 location = geolocator.geocode(address)
-                time.sleep(1)  # be nice to Nominatim
+                time.sleep(1)  
 
                 if not location:
                     continue
@@ -73,10 +71,10 @@ class Command(BaseCommand):
                 )
 
                 created += 1
-                tqdm.write(f"✅ {created}: {address}")  # prints without breaking the progress bar
+                tqdm.write(f"{created}: {address}") 
 
             except Exception as e:
                 errors += 1
-                tqdm.write(f"❌ {address}: {e}")
+                tqdm.write(f"{address}: {e}")
 
-        print(f"✅ Done. Created {created} properties. Errors: {errors}.")
+        print(f"Created {created} properties. Errors: {errors}.")

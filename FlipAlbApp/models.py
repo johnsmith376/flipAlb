@@ -7,8 +7,8 @@ class Property(models.Model):
     lat = models.FloatField()
     lng = models.FloatField()
     condition = models.CharField(max_length=50, default='Unknown')
-    status = models.CharField(max_length=50, default='vacant')  # KNOWN/REPORTED/etc
-    property_type = models.CharField(max_length=50, default='UNK')  # SFH/2-4/etc
+    status = models.CharField(max_length=50, default='vacant')  
+    property_type = models.CharField(max_length=50, default='UNK')  
     city = models.CharField(max_length=50, default='Albany')
     sqft = models.CharField(max_length=50, null=True, default="None")
     ownerName = models.CharField(max_length=50, null=True, default="None")

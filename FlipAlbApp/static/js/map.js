@@ -1,8 +1,8 @@
 let map;
 let markersLayer;
 
+// initialize map
 function initMap() {
-  // Center roughly on Albany; tweak later.
   map = L.map("map", { zoomControl: true }).setView([42.6526, -73.7562], 13);
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -14,24 +14,25 @@ function initMap() {
   return map;
 }
 
+// clear pins
 function clearPins() {
   markersLayer.clearLayers();
 }
 
+// status color code
 function statusColor(status) {
   switch ((status || "").toUpperCase()) {
-    case "REPORTED": return "#ff6666ff";   // orange
-    case "IN_PROCESS": return "#4cb6f8ff"; // blue
-    case "ACTIVATED": return "#21ff55ff";  // green
+    case "REPORTED": return "#ff6666ff";   
+    case "IN_PROCESS": return "#4cb6f8ff";
+    case "ACTIVATED": return "#21ff55ff";  
     case "Status Unknown":
-    default: return "#ea87d4ff";           // bright green (6-digit)
+    default: return "#ea87d4ff";          
   }
 }
 
+// draw pins
 function addPins(properties, onClick) {
-  // properties: [{ id, address, lat, lng, type, status, popup_html, estimates, ... }]
   for (const p of properties) {
-    // Robust: handle numbers or numeric strings
     const lat = Number(p.lat);
     const lng = Number(p.lng);
     if (!Number.isFinite(lat) || !Number.isFinite(lng)) continue;
@@ -47,7 +48,6 @@ function addPins(properties, onClick) {
       fillColor: color
     });
 
-    // Popup HTML from backend (fallback if missing)
     marker.bindPopup(
       p.popup_html || `<div style="padding:12px"><b>${p.address || "No Address"}</b></div>`
     );

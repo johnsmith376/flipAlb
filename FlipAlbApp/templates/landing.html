@@ -43,8 +43,8 @@
         radial-gradient(900px 600px at 65% 90%, rgba(251,146,60,0.12), transparent 62%),
         linear-gradient(180deg, var(--bg1), var(--bg2));
 
-      background-attachment: fixed;  /* ✅ prevents scroll banding */
-      background-repeat: no-repeat;  /* ✅ prevents subtle tiling seams */
+      background-attachment: fixed;  
+      background-repeat: no-repeat;  
     }
 
 
@@ -64,7 +64,6 @@
       z-index: -1;
     }
 
-    /* Top nav */
     .topbar{
       position: sticky;
       top: 0;
@@ -151,14 +150,13 @@
     }
     .btnGhost:hover{ background: rgba(255,255,255,0.82); transform: translateY(-1px); }
 
-    /* Layout (more breathing room) */
     .wrap{
-      max-width: 1040px;              /* narrower = cleaner */
+      max-width: 1040px;             
       margin: 0 auto;
-      padding: 34px 22px 64px;        /* more padding */
+      padding: 34px 22px 64px;       
     }
 
-    .stack{ display:grid; gap: 18px; } /* consistent spacing between sections */
+    .stack{ display:grid; gap: 18px; } 
 
     .card{
       border:1px solid rgba(15,23,42,0.10);
@@ -168,7 +166,6 @@
       overflow:hidden;
     }
 
-    /* HERO: vertical stack on purpose (less clutter) */
     .heroMain{
       padding: 30px;
       position: relative;
@@ -214,7 +211,7 @@
       font-size: 44px;
       line-height: 1.08;
       letter-spacing: -0.7px;
-      max-width: 18ch; /* keeps headline tidy */
+      max-width: 18ch; 
     }
 
     .accent{
@@ -239,7 +236,6 @@
       margin-top: 18px;
     }
 
-    /* Facts: 2 columns = calmer (and 1 on mobile) */
     .facts{
       margin-top: 22px;
       display:grid;
@@ -271,7 +267,6 @@
     .pillDot--warn{ background: rgba(245,158,11,0.85); }
     .pillDot--ok{ background: rgba(22,163,74,0.85); }
 
-    /* Side card is now its own section below hero (less cramped) */
     .side{
       padding: 22px 24px;
       background: var(--card2);
@@ -297,7 +292,6 @@
     }
     .list strong{ color: var(--text); }
 
-    /* chips: fewer + wrap nicely */
     .chips{
       margin-top: 14px;
       display:flex;
@@ -313,7 +307,6 @@
       background: rgba(255,255,255,0.55);
     }
 
-    /* Sections: single column for readability */
     .section{
       padding: 24px 24px;
     }
@@ -341,7 +334,7 @@
     .steps{
       margin: 14px 0 0;
       display:grid;
-      grid-template-columns: repeat(2, minmax(0,1fr)); /* calmer */
+      grid-template-columns: repeat(2, minmax(0,1fr)); 
       gap: 12px;
     }
     .step{
@@ -369,14 +362,13 @@
       max-width: 46ch;
     }
 
-    /* Responsive */
     @media (max-width: 980px){
       h1{ font-size: 36px; max-width: 22ch; }
       .facts{ grid-template-columns: 1fr; }
       .steps{ grid-template-columns: 1fr; }
       .wrap{ padding: 26px 16px 54px; }
       .topbar{ padding: 0 14px; }
-      .navLink{ display:none; } /* reduce clutter on mobile */
+      .navLink{ display:none; } 
     }
   </style>
 </head>

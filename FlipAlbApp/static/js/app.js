@@ -1,8 +1,10 @@
+// load time 
 function nowTimeLabel() {
   const d = new Date();
   return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
 
+// load status
 function setStatusPill(text, kind) {
   const el = document.getElementById("statusPill");
   el.textContent = text;
@@ -10,6 +12,7 @@ function setStatusPill(text, kind) {
   el.classList.add(kind);
 }
 
+// format filters
 function getFiltersFromUI() {
   return {
     role: document.getElementById("filterRole").value,
@@ -18,6 +21,7 @@ function getFiltersFromUI() {
   };
 }
 
+// expand location info
 function openDrawer(property) {
   const drawer = document.getElementById("drawer");
   drawer.classList.remove("drawer--hidden");
@@ -25,7 +29,7 @@ function openDrawer(property) {
 
   document.getElementById("drawerTitle").textContent = property.address || "Unknown address";
   document.getElementById("drawerSubtitle").textContent =
-    `${property.type || "UNK"} • ${property.status || "KNOWN"}`;
+    `${property.type || "UNK"} • ${property.status || "Status Unkown"}`;
 
   const body = drawer.querySelector(".drawer__body");
   body.innerHTML = `
@@ -50,10 +54,13 @@ function openDrawer(property) {
   `;
 }
 
+// hide location info
 function closeDrawer() {
   document.getElementById("drawer").classList.add("drawer--hidden");
 }
 
+
+// refresh pins
 async function refresh() {
   setStatusPill("Loading pins…", "pill--neutral");
 
@@ -73,13 +80,14 @@ async function refresh() {
   }
 }
 
+
+// initialize 
 window.addEventListener("DOMContentLoaded", () => {
   initMap();
 
   document.getElementById("btnRefresh").addEventListener("click", refresh);
   document.getElementById("drawerClose").addEventListener("click", closeDrawer);
 
-  // Auto refresh when filters change
   ["filterRole", "filterType", "filterStatus"].forEach((id) => {
     document.getElementById(id).addEventListener("change", refresh);
   });

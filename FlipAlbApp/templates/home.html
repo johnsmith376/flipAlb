@@ -27,7 +27,7 @@
       display:grid;
       place-items:center;
       color: var(--ink);
-      background: #070A14; /* base under the layers */
+      background: #070A14; 
     }
 
     .bgDark, .bgLight{
@@ -53,7 +53,6 @@
       100%    { opacity: 1; }
     }
 
-    /* Clouds appear in the “good” phase */
     .clouds{
       position: fixed; inset: 0;
       pointer-events:none;
@@ -86,14 +85,12 @@
     .cloud::before{ width: 80px; height: 80px; left: 30px; top: -24px; }
     .cloud::after { width: 110px; height: 110px; right: 26px; top: -44px; opacity:.92; }
 
-    /* Flat stage (no card/box) */
     .stage{
       width: min(var(--stageW), 94vw);
       height: min(var(--stageH), 70vh);
       position: relative;
     }
 
-    /* Ground line */
     .groundLine{
       position:absolute;
       left: 50%;
@@ -105,7 +102,6 @@
       opacity: .7;
     }
 
-    /* Mask shows only above the ground line */
     .mask{
       position:absolute;
       left: 50%;
@@ -201,7 +197,6 @@
       }
     }
 
-    /* Logo reveal */
     .brand{
       position: absolute;
       left: 50%;
@@ -232,7 +227,6 @@
       color: var(--muted);
     }
 
-    /* CTA button */
     .cta{
       position: absolute;
       left: 50%;
@@ -298,7 +292,6 @@
     <div class="mask">
       <div class="houseLayer">
 
-        <!-- UGLY HOUSE -->
         <div class="houseSprite uglyAnim" aria-hidden="true">
           <svg viewBox="0 0 320 320" role="img" aria-label="Ugly house illustration">
             <defs>
@@ -350,7 +343,6 @@
           </svg>
         </div>
 
-        <!-- NICE HOUSE -->
         <div class="houseSprite niceAnim">
           <svg viewBox="0 0 320 320" role="img" aria-label="Nice house illustration">
             <defs>
@@ -430,10 +422,5 @@
 
   </div>
 
-  <script>
-    // No zoom, no auto redirect — button is the navigation.
-    // If you want auto-redirect back, uncomment below.
-    // setTimeout(() => { window.location.href = "/landing"; }, 8200);
-  </script>
 </body>
 </html>

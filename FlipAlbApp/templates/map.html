@@ -54,7 +54,6 @@ body {
 .pill--warn { color: #ffd8a8; border-color: rgba(255,216,168,0.2); }
 .pill--neutral { color: var(--muted); }
 
-/* ✅ NEW: Back button */
 .backBtn{
   font-size: 12px;
   padding: 8px 10px;
@@ -200,7 +199,6 @@ body {
 .drawer__body { padding: 14px; overflow: auto; }
 .drawer__empty { color: var(--muted); font-size: 13px; line-height: 1.4; }
 
-/* Mobile: sidebar becomes top */
 @media (max-width: 900px) {
   .layout { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
   .sidebar { border-right: none; border-bottom: 1px solid var(--border); }
@@ -227,7 +225,6 @@ body {
     </div>
 
     <div class="topbar__right">
-      <!-- ✅ NEW back button -->
       <a class="backBtn" href="/landing">← Back to Landing</a>
 
       <div id="statusPill" class="pill pill--neutral">Loading map…</div>
@@ -265,7 +262,7 @@ body {
           <label class="label" for="filterStatus">Status</label>
           <select id="filterStatus" class="select">
             <option value="">Any</option>
-            <option value="KNOWN">Known</option>
+            <option value="Status Unknown">Status Unknown</option>
             <option value="REPORTED">Reported</option>
             <option value="IN_PROCESS">In process</option>
             <option value="ACTIVATED">Activated</option>
