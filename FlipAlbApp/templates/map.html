@@ -54,6 +54,28 @@ body {
 .pill--warn { color: #ffd8a8; border-color: rgba(255,216,168,0.2); }
 .pill--neutral { color: var(--muted); }
 
+/* ✅ NEW: Back button */
+.backBtn{
+  font-size: 12px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform .12s ease, background .12s ease;
+}
+.backBtn:hover{
+  background: rgba(255,255,255,0.10);
+  transform: translateY(-1px);
+}
+.backBtn:active{
+  transform: translateY(0px);
+}
+
 .layout {
   height: calc(100vh - 64px);
   display: grid;
@@ -183,8 +205,8 @@ body {
   .layout { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
   .sidebar { border-right: none; border-bottom: 1px solid var(--border); }
 }
+</style>
 
-</style> 
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -195,8 +217,8 @@ body {
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""
   />
-
 </head>
+
 <body>
   <header class="topbar">
     <div class="brand">
@@ -205,6 +227,9 @@ body {
     </div>
 
     <div class="topbar__right">
+      <!-- ✅ NEW back button -->
+      <a class="backBtn" href="/landing">← Back to Landing</a>
+
       <div id="statusPill" class="pill pill--neutral">Loading map…</div>
     </div>
   </header>
@@ -289,7 +314,6 @@ body {
     </section>
   </main>
 
-
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
@@ -301,4 +325,3 @@ body {
   <script src="{% static 'js/app.js' %}"></script>
 </body>
 </html>
-
