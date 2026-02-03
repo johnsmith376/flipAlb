@@ -1,6 +1,7 @@
 let map;
 let markersLayer;
 
+
 // initialize map
 function initMap() {
   map = L.map("map", { zoomControl: true }).setView([42.6526, -73.7562], 13);
